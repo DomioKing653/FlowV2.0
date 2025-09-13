@@ -69,7 +69,7 @@ func (p *Parser) expr() Node {
 		node = BinaryOperationNode{
 			Left:     node,
 			Operator: op.Value,
-			Right:    p.factor(),
+			Right:    p.term(),
 		}
 	}
 	return node

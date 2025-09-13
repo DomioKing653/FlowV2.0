@@ -20,7 +20,8 @@ func mainProgram(code string) {
 	* Parser
 	 */
 	parser := Parser.NewParser(tokens)
-	parser.Parse()
+	ast := parser.Parse()
+	fmt.Println(ast)
 	fmt.Println("Output Tokens:")
 	for _, tok := range tokens {
 		fmt.Printf("Token: %-6s  Value: %s\n", tok.Type, tok.Value)
