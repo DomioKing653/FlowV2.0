@@ -55,12 +55,12 @@ func (p *Parser) Statement() Node {
 	if current.Type == Lexer.IDENTIFIER {
 		ident := current.Value
 		p.nextToken()
-		if current.Type == Lexer.EQUALS {
+		if p.current.Type == Lexer.EQUALS {
 			p.nextToken()
-			expression := p.expr()
-			return VariableNode{Name: ident, Value: expression}
+			exprNode := p.expr()
+			return VariableAssignNode{Name: ident, Value: exprNode}
 		}
-		return VariableAccessNode{Name: current.Value}
+		return VariableAccessNode{Name: ident}
 	}
 	return p.expr()
 }
@@ -119,5 +119,11 @@ func (p *Parser) expr() Node {
 	return node
 }
 func (p *Parser) Parse() Node {
-	return p.Statement()
+	program := ProgramNode{}
+	for {
+		if p.current.Type == Lexer.EOF {
+			return program
+		}
+		program.statements = append(program.statements, p.Statement())
+	}
 }

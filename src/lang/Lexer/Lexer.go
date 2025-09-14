@@ -20,7 +20,6 @@ func (l *Lexer) peek() rune {
 	}
 	return rune(l.input[l.pos])
 }
-
 func (l *Lexer) advance() {
 	l.pos++
 }

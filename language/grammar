@@ -1,3 +1,6 @@
-expr -> term   ((PLUS|MINUS) term)*
-term -> factor ((DIVIDE|MULTIPLY) factor)*
-factor -> FLOAT|INT|ID
+expr    -> term   ((PLUS|MINUS) term)*
+term    -> factor ((DIVIDE|MULTIPLY) factor)*
+factor  ->         FLOAT|INT|ID
+statement-> LET IDENT ASSIGN expr |
+            IDENT ASSIGN EXPR     |
+            expr

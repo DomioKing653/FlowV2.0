@@ -26,7 +26,6 @@ func mainProgram(code string) {
 	parser := Parser.NewParser(tokens)
 	ast := parser.Parse()
 	ast.DisplayNode()
-
 	/*
 	 * Interpreter
 	 */

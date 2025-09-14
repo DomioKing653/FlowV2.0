@@ -1,6 +1,10 @@
 package Parser
 
-import "fmt"
+import (
+	"fmt"
+
+	"Flow2.0/lang/variables"
+)
 
 // Node Main Program node /*
 type Node interface {
@@ -48,7 +52,31 @@ func (n BinaryOperationNode) VisitNode() float64 {
 	}
 }
 func (n BinaryOperationNode) DisplayNode() {
-	fmt.Printf("%s %s %s", n.Left, n.Operator, n.Right)
+	fmt.Printf("{%s %s %s}", n.Left, n.Operator, n.Right)
+}
+
+/*
+Program Node
+*/
+
+type ProgramNode struct {
+	statements []Node
+}
+
+func (n ProgramNode) VisitNode() float64 {
+	for _, statement := range n.statements {
+		statement.VisitNode()
+	}
+	return 0
+}
+func (n ProgramNode) DisplayNode() {
+	fmt.Printf("Program{\n")
+	for _, statement := range n.statements {
+		fmt.Print("  ")
+		statement.DisplayNode()
+	}
+	fmt.Printf("}\n")
+
 }
 
 /*
@@ -61,11 +89,17 @@ type VariableNode struct {
 }
 
 func (n VariableNode) VisitNode() float64 {
-	panic("Not implemented(Variable Declaration)")
+	_, ok := variables.Variables[n.Name]
+	if ok {
+		panic("Variable already exists")
+	} else {
+		variables.Variables[n.Name] = n.Value.VisitNode()
+	}
+	return n.Value.VisitNode()
 }
 
 func (n VariableNode) DisplayNode() {
-	fmt.Printf("let %s = %v\n", n.Name, n.Value)
+	fmt.Printf("{let %s = %v}\n", n.Name, n.Value.VisitNode())
 }
 
 /*
@@ -77,10 +111,16 @@ type VariableAccessNode struct {
 }
 
 func (n VariableAccessNode) VisitNode() float64 {
-	panic("Not implemented(Access Declaration)")
+	variable, ok := variables.Variables[n.Name]
+	if ok {
+		return variable
+	} else {
+		panic(fmt.Sprintf("Variable %s not found", n.Name))
+	}
+	return variables.Variables[n.Name]
 }
 func (n VariableAccessNode) DisplayNode() {
-	fmt.Printf("%s\n", n.Name)
+	fmt.Printf("{%s}\n", n.Name)
 }
 
 /*
@@ -93,8 +133,14 @@ type VariableAssignNode struct {
 }
 
 func (n VariableAssignNode) VisitNode() float64 {
-	panic("Not implemented(Set Declaration)")
+	_, ok := variables.Variables[n.Name]
+	if ok {
+		variables.Variables[n.Name] = n.Value.VisitNode()
+		return 0
+	} else {
+		panic(fmt.Sprintf("Variable %s not found", n.Name))
+	}
 }
 func (n VariableAssignNode) DisplayNode() {
-	fmt.Printf("%s=%s\n", n.Name, n.Value)
+	fmt.Printf("{%s=%v}\n", n.Name, n.Value)
 }
