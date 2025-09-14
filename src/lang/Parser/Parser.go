@@ -37,8 +37,9 @@ func (p *Parser) factor() Node {
 		val, _ := strconv.Atoi(tok.Value)
 		p.nextToken()
 		return NumberNode{Value: val}
+	} else {
+		panic("Syntax Error: Expected INT but found " + tok.Type)
 	}
-	panic("Syntax Error: Expected INT but found " + tok.Type)
 }
 
 /*

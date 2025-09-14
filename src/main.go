@@ -16,16 +16,22 @@ func mainProgram(code string) {
 	 */
 	lexer := Lexer.NewLexer(code)
 	tokens := lexer.Lex()
+	fmt.Println("Output Tokens:")
+	for _, tok := range tokens {
+		fmt.Printf("Token: %-6s  Value: %s\n", tok.Type, tok.Value)
+	}
+
 	/*
 	* Parser
 	 */
 	parser := Parser.NewParser(tokens)
 	ast := parser.Parse()
 	fmt.Println(ast)
-	fmt.Println("Output Tokens:")
-	for _, tok := range tokens {
-		fmt.Printf("Token: %-6s  Value: %s\n", tok.Type, tok.Value)
-	}
+
+	/*
+	 * Interpreter
+	 */
+	fmt.Println(ast.VisitNode())
 }
 func main() {
 	programPath := os.Args[1]
