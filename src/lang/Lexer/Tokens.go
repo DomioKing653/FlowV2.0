@@ -6,14 +6,17 @@ const (
 	/*
 		Types
 	*/
-	INT    TokenType = "NUMBER"
-	FLOAT  TokenType = "FLOAT"
-	STRING TokenType = "STRING"
+	INT   TokenType = "NUMBER"
+	FLOAT TokenType = "FLOAT"
 	/*
 		Keywords
 	*/
 	LET TokenType = "LET"
 
+	/*
+		Functions
+	*/
+	PRINTLN TokenType = "PRINTLN"
 	/*
 		Misc Thingy
 	*/
@@ -23,10 +26,12 @@ const (
 	/*
 		Math
 	*/
-	PLUS  TokenType = "PLUS"
-	MINUS TokenType = "MINUS"
-	STAR  TokenType = "STAR"
-	SLASH TokenType = "SLASH"
+	PLUS   TokenType = "PLUS"
+	MINUS  TokenType = "MINUS"
+	STAR   TokenType = "STAR"
+	SLASH  TokenType = "SLASH"
+	LPAREN TokenType = "LPAREN"
+	RPAREN TokenType = "RPAREN"
 	/*
 		Parser Thingy
 	*/

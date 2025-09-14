@@ -38,7 +38,8 @@ func (p *Parser) nextToken() {
 
 func (p *Parser) Statement() Node {
 	var current Lexer.Token = p.current
-	if current.Type == Lexer.LET {
+	switch p.current.Type {
+	case Lexer.LET:
 		p.nextToken()
 		if p.current.Type != Lexer.IDENTIFIER {
 			panic("Expected IDENTIFIER but found" + current.Type)
@@ -51,8 +52,7 @@ func (p *Parser) Statement() Node {
 		p.nextToken()
 		var expression Node = p.expr()
 		return VariableNode{Name: ident, Value: expression}
-	}
-	if current.Type == Lexer.IDENTIFIER {
+	case Lexer.IDENTIFIER:
 		ident := current.Value
 		p.nextToken()
 		if p.current.Type == Lexer.EQUALS {
@@ -61,8 +61,21 @@ func (p *Parser) Statement() Node {
 			return VariableAssignNode{Name: ident, Value: exprNode}
 		}
 		return VariableAccessNode{Name: ident}
+	case Lexer.PRINTLN:
+		p.nextToken()
+		if p.current.Type != Lexer.LPAREN {
+			panic("Expected LPAREN but found" + current.Type)
+		}
+		p.nextToken()
+		exprNode := p.expr()
+		if p.current.Type != Lexer.RPAREN {
+			panic("Expected RPAREN but found" + current.Type)
+		}
+		p.nextToken()
+		return PrintLnNode{exprNode}
+	default:
+		return p.expr()
 	}
-	return p.expr()
 }
 
 /*
@@ -80,8 +93,23 @@ func (p *Parser) factor() Node {
 		val, _ := strconv.ParseFloat(valueStr, 64)
 		p.nextToken()
 		return NumberNode{Value: val}
+
+	}
+	if tok.Type == Lexer.IDENTIFIER {
+		ident := tok.Value
+		p.nextToken()
+		return VariableAccessNode{Name: ident}
+	}
+	if tok.Type == Lexer.LPAREN {
+		p.nextToken()
+		exprNode := p.expr()
+		if tok.Type == Lexer.RPAREN {
+			panic("Expected RPAREN but found" + tok.Value)
+		}
+		p.nextToken()
+		return exprNode
 	} else {
-		panic("Syntax Error: Expected INT  or FLOAT but found " + tok.Type)
+		panic("Syntax Error: Expected VALUE but found " + tok.Type)
 	}
 }
 

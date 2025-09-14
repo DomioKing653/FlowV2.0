@@ -59,7 +59,12 @@ func (l *Lexer) NextToken() Token {
 		case '=':
 			l.advance()
 			return Token{Type: EQUALS, Value: "="}
-
+		case '(':
+			l.advance()
+			return Token{Type: LPAREN, Value: "("}
+		case ')':
+			l.advance()
+			return Token{Type: RPAREN, Value: ")"}
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
@@ -105,6 +110,8 @@ func (l *Lexer) MakeText() Token {
 	switch text {
 	case "let":
 		return Token{Type: LET, Value: "let"}
+	case "println":
+		return Token{Type: PRINTLN, Value: "println"}
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}

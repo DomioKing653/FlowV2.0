@@ -48,7 +48,7 @@ func (n BinaryOperationNode) VisitNode() float64 {
 	case "/":
 		return n.Left.VisitNode() / n.Right.VisitNode()
 	default:
-		panic("Idk")
+		panic("Unknown operator")
 	}
 }
 func (n BinaryOperationNode) DisplayNode() {
@@ -136,11 +136,29 @@ func (n VariableAssignNode) VisitNode() float64 {
 	_, ok := variables.Variables[n.Name]
 	if ok {
 		variables.Variables[n.Name] = n.Value.VisitNode()
-		return 0
+		return variables.Variables[n.Name]
 	} else {
 		panic(fmt.Sprintf("Variable %s not found", n.Name))
 	}
 }
 func (n VariableAssignNode) DisplayNode() {
 	fmt.Printf("{%s=%v}\n", n.Name, n.Value)
+}
+
+/*
+	Println node
+*/
+
+type PrintLnNode struct {
+	Value Node
+}
+
+func (n PrintLnNode) VisitNode() float64 {
+	value := n.Value.VisitNode()
+	fmt.Println(value)
+	return value
+}
+
+func (n PrintLnNode) DisplayNode() {
+	fmt.Printf("prinln(%v)\n", n.Value)
 }
