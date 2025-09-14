@@ -8,7 +8,10 @@ type Node interface {
 	DisplayNode()
 }
 
-// NumberNode /*
+/*
+Number Node
+*/
+
 type NumberNode struct {
 	Value float64
 }
@@ -58,9 +61,40 @@ type VariableNode struct {
 }
 
 func (n VariableNode) VisitNode() float64 {
-	return n.Value.VisitNode()
+	panic("Not implemented(Variable Declaration)")
 }
 
 func (n VariableNode) DisplayNode() {
-	fmt.Printf("%s = %v\n", n.Name, n.Value)
+	fmt.Printf("let %s = %v\n", n.Name, n.Value)
+}
+
+/*
+Variable Access Node
+*/
+
+type VariableAccessNode struct {
+	Name string
+}
+
+func (n VariableAccessNode) VisitNode() float64 {
+	panic("Not implemented(Access Declaration)")
+}
+func (n VariableAccessNode) DisplayNode() {
+	fmt.Printf("%s\n", n.Name)
+}
+
+/*
+	Variable Set Node
+*/
+
+type VariableAssignNode struct {
+	Name  string
+	Value Node
+}
+
+func (n VariableAssignNode) VisitNode() float64 {
+	panic("Not implemented(Set Declaration)")
+}
+func (n VariableAssignNode) DisplayNode() {
+	fmt.Printf("%s=%s\n", n.Name, n.Value)
 }

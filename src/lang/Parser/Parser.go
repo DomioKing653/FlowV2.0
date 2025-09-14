@@ -52,6 +52,16 @@ func (p *Parser) Statement() Node {
 		var expression Node = p.expr()
 		return VariableNode{Name: ident, Value: expression}
 	}
+	if current.Type == Lexer.IDENTIFIER {
+		ident := current.Value
+		p.nextToken()
+		if current.Type == Lexer.EQUALS {
+			p.nextToken()
+			expression := p.expr()
+			return VariableNode{Name: ident, Value: expression}
+		}
+		return VariableAccessNode{Name: current.Value}
+	}
 	return p.expr()
 }
 

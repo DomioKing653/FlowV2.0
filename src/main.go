@@ -30,7 +30,7 @@ func mainProgram(code string) {
 	/*
 	 * Interpreter
 	 */
-	//	fmt.Println(ast.VisitNode())
+	fmt.Println(ast.VisitNode())
 }
 func main() {
 	programPath := os.Args[1]
