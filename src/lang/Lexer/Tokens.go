@@ -3,12 +3,34 @@ package Lexer
 type TokenType string
 
 const (
-	NUMBER TokenType = "NUMBER"
-	PLUS   TokenType = "PLUS"
-	MINUS  TokenType = "MINUS"
-	STAR   TokenType = "STAR"
-	SLASH  TokenType = "SLASH"
-	EOF    TokenType = "EOF"
+	/*
+		Types
+	*/
+	INT    TokenType = "NUMBER"
+	FLOAT  TokenType = "FLOAT"
+	STRING TokenType = "STRING"
+	/*
+		Keywords
+	*/
+	LET TokenType = "LET"
+
+	/*
+		Misc Thingy
+	*/
+
+	IDENTIFIER TokenType = "IDENTIFIER"
+	EQUALS     TokenType = "EQUALS"
+	/*
+		Math
+	*/
+	PLUS  TokenType = "PLUS"
+	MINUS TokenType = "MINUS"
+	STAR  TokenType = "STAR"
+	SLASH TokenType = "SLASH"
+	/*
+		Parser Thingy
+	*/
+	EOF TokenType = "EOF"
 )
 
 type Token struct {

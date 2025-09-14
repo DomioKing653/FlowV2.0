@@ -25,6 +25,10 @@ func (l *Lexer) advance() {
 	l.pos++
 }
 
+/*
+	Making Tokens
+*/
+
 func (l *Lexer) NextToken() Token {
 	for l.peek() != 0 {
 		ch := l.peek()
@@ -35,13 +39,11 @@ func (l *Lexer) NextToken() Token {
 		}
 
 		if unicode.IsDigit(ch) {
-			start := l.pos
-			for unicode.IsDigit(l.peek()) {
-				l.advance()
-			}
-			return Token{Type: NUMBER, Value: l.input[start:l.pos]}
+			return l.MakeNumber()
 		}
-
+		if unicode.IsLetter(ch) {
+			return l.MakeText()
+		}
 		switch ch {
 		case '+':
 			l.advance()
@@ -55,12 +57,63 @@ func (l *Lexer) NextToken() Token {
 		case '/':
 			l.advance()
 			return Token{Type: SLASH, Value: "/"}
+		case '=':
+			l.advance()
+			return Token{Type: EQUALS, Value: "="}
+
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
 	}
 	return Token{Type: EOF, Value: ""}
 }
+
+/*
+	Number Creation
+*/
+
+func (l *Lexer) MakeNumber() Token {
+	start := l.pos
+	hasDot := false
+	for {
+		if unicode.IsDigit(l.peek()) {
+			l.advance()
+		} else if l.peek() == ',' && hasDot == false {
+			hasDot = true
+			l.advance()
+		} else if l.peek() == ',' && hasDot == true {
+			panic("Dot not allowed in number")
+		} else {
+			break
+		}
+	}
+	if hasDot {
+		return Token{Type: FLOAT, Value: l.input[start:l.pos]}
+	}
+	return Token{Type: INT, Value: l.input[start:l.pos]}
+}
+
+/*
+	Creating Text Tokens
+*/
+
+func (l *Lexer) MakeText() Token {
+	start := l.pos
+	for unicode.IsLetter(l.peek()) {
+		l.advance()
+	}
+	text := l.input[start:l.pos]
+	switch text {
+	case "let":
+		return Token{Type: LET, Value: "let"}
+	default:
+		return Token{Type: IDENTIFIER, Value: text}
+	}
+}
+
+/*
+Main Lexer Function
+*/
 
 func (l *Lexer) Lex() []Token {
 	var tokens []Token

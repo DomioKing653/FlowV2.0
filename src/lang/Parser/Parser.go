@@ -2,9 +2,14 @@ package Parser
 
 import (
 	"strconv"
+	"strings"
 
 	"Flow2.0/lang/Lexer"
 )
+
+/*
+Parser
+*/
 
 type Parser struct {
 	current Lexer.Token
@@ -28,17 +33,45 @@ func (p *Parser) nextToken() {
 }
 
 /*
-* Factor
- */
+	Statement
+*/
+
+func (p *Parser) Statement() Node {
+	var current Lexer.Token = p.current
+	if current.Type == Lexer.LET {
+		p.nextToken()
+		if p.current.Type != Lexer.IDENTIFIER {
+			panic("Expected IDENTIFIER but found" + current.Type)
+		}
+		ident := p.current.Value
+		p.nextToken()
+		if current.Type == Lexer.EQUALS {
+			panic("Expected EQUALS but found" + current.Type)
+		}
+		p.nextToken()
+		var expression Node = p.expr()
+		return VariableNode{Name: ident, Value: expression}
+	}
+	return p.expr()
+}
+
+/*
+Factor
+*/
 func (p *Parser) factor() Node {
 	tok := p.current
-
-	if tok.Type == Lexer.NUMBER {
-		val, _ := strconv.Atoi(tok.Value)
+	if tok.Type == Lexer.INT {
+		val, _ := strconv.ParseFloat(tok.Value, 64)
+		p.nextToken()
+		return NumberNode{Value: val}
+	}
+	if tok.Type == Lexer.FLOAT {
+		var valueStr string = strings.ReplaceAll(tok.Value, ",", ".")
+		val, _ := strconv.ParseFloat(valueStr, 64)
 		p.nextToken()
 		return NumberNode{Value: val}
 	} else {
-		panic("Syntax Error: Expected INT but found " + tok.Type)
+		panic("Syntax Error: Expected INT  or FLOAT but found " + tok.Type)
 	}
 }
 
@@ -76,5 +109,5 @@ func (p *Parser) expr() Node {
 	return node
 }
 func (p *Parser) Parse() Node {
-	return p.expr()
+	return p.Statement()
 }

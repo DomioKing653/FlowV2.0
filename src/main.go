@@ -15,23 +15,22 @@ func mainProgram(code string) {
 	* Lexer
 	 */
 	lexer := Lexer.NewLexer(code)
-	tokens := lexer.Lex()
+	var tokens []Lexer.Token = lexer.Lex()
 	fmt.Println("Output Tokens:")
 	for _, tok := range tokens {
 		fmt.Printf("Token: %-6s  Value: %s\n", tok.Type, tok.Value)
 	}
-
 	/*
 	* Parser
 	 */
 	parser := Parser.NewParser(tokens)
 	ast := parser.Parse()
-	fmt.Println(ast)
+	ast.DisplayNode()
 
 	/*
 	 * Interpreter
 	 */
-	fmt.Println(ast.VisitNode())
+	//	fmt.Println(ast.VisitNode())
 }
 func main() {
 	programPath := os.Args[1]
