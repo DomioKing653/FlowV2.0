@@ -150,8 +150,9 @@ func (p *Parser) Parse() Node {
 	program := ProgramNode{}
 	for {
 		if p.current.Type == Lexer.EOF {
-			return program
+			break
 		}
 		program.statements = append(program.statements, p.Statement())
 	}
+	return program
 }

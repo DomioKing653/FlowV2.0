@@ -42,3 +42,17 @@ type Token struct {
 	Type  TokenType
 	Value string
 }
+
+type VariableType string
+
+const (
+	FloatVariable   VariableType = "FLOAT"
+	StringVariable  VariableType = "STRING"
+	IntegerVariable VariableType = "INTEGER"
+	NilVariable     VariableType = "NIL"
+)
+
+type Variable struct {
+	Type  VariableType
+	Value string
+}

@@ -3,6 +3,7 @@ package Parser
 import (
 	"fmt"
 
+	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/variables"
 )
 
@@ -161,4 +162,9 @@ func (n PrintLnNode) VisitNode() float64 {
 
 func (n PrintLnNode) DisplayNode() {
 	fmt.Printf("prinln(%v)\n", n.Value)
+}
+
+type Value struct {
+	Value string
+	Type  Lexer.VariableType
 }
