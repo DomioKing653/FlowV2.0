@@ -10,14 +10,14 @@ import (
 	"Flow2.0/lang/Parser"
 )
 
-var silent bool = false
+var silent = false
 
 func mainProgram(code string) {
 	/*
 	* Lexer
 	 */
 	lexer := Lexer.NewLexer(code)
-	var tokens []Lexer.Token = lexer.Lex()
+	var tokens = lexer.Lex()
 
 	if !silent {
 		fmt.Println("Output Tokens:")

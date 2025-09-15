@@ -37,9 +37,10 @@ func (p *Parser) nextToken() {
 */
 
 func (p *Parser) Statement() Node {
-	var current Lexer.Token = p.current
+	var current = p.current
 	switch p.current.Type {
-	case Lexer.LET:
+	case Lexer.CONST, Lexer.LET:
+		varType := p.current.Type
 		p.nextToken()
 		if p.current.Type != Lexer.IDENTIFIER {
 			panic("Expected IDENTIFIER but found" + current.Type)
@@ -50,8 +51,12 @@ func (p *Parser) Statement() Node {
 			panic("Expected EQUALS but found" + current.Type)
 		}
 		p.nextToken()
-		var expression Node = p.expr()
-		return VariableNode{Name: ident, Value: expression}
+		var expression = p.expr()
+		if varType == Lexer.CONST {
+			return VariableNode{Name: ident, Value: expression, Constant: true}
+		}
+		return VariableNode{Name: ident, Value: expression, Constant: false}
+
 	case Lexer.IDENTIFIER:
 		ident := current.Value
 		p.nextToken()
@@ -89,7 +94,7 @@ func (p *Parser) factor() Node {
 		return NumberNode{Value: val}
 	}
 	if tok.Type == Lexer.FLOAT {
-		var valueStr string = strings.ReplaceAll(tok.Value, ",", ".")
+		var valueStr = strings.ReplaceAll(tok.Value, ",", ".")
 		val, _ := strconv.ParseFloat(valueStr, 64)
 		p.nextToken()
 		return NumberNode{Value: val}

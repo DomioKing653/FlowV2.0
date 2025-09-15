@@ -11,7 +11,8 @@ const (
 	/*
 		Keywords
 	*/
-	LET TokenType = "LET"
+	LET   TokenType = "LET"
+	CONST TokenType = "CONST"
 
 	/*
 		Functions
@@ -20,7 +21,6 @@ const (
 	/*
 		Misc Thingy
 	*/
-
 	IDENTIFIER TokenType = "IDENTIFIER"
 	EQUALS     TokenType = "EQUALS"
 	/*
@@ -48,7 +48,7 @@ type VariableType string
 const (
 	FloatVariable   VariableType = "FLOAT"
 	StringVariable  VariableType = "STRING"
-	IntegerVariable VariableType = "INTEGER"
+	BooleanVariable VariableType = "BOOLEAN"
 	NilVariable     VariableType = "NIL"
 )
 

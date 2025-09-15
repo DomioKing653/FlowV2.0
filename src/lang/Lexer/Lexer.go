@@ -112,6 +112,9 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: LET, Value: "let"}
 	case "println":
 		return Token{Type: PRINTLN, Value: "println"}
+	case "const":
+		return Token{Type: CONST, Value: "const"}
+
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}
