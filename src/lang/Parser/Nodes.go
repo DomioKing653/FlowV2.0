@@ -29,6 +29,22 @@ func (n NumberNode) DisplayNode() {
 }
 
 /*
+	Boolean node
+*/
+
+type BooleanNode struct {
+	Value bool
+}
+
+func (n BooleanNode) VisitNode() variables.ValueNode {
+	return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: n.Value}
+}
+
+func (n BooleanNode) DisplayNode() {
+	fmt.Println(n.Value)
+}
+
+/*
 	Binary Operation Node
 */
 
@@ -204,4 +220,27 @@ func (n PrintLnNode) VisitNode() variables.ValueNode {
 
 func (n PrintLnNode) DisplayNode() {
 	fmt.Printf("prinln(%v)\n", n.Value)
+}
+
+/*
+	Loop Node
+*/
+
+type LoopNode struct {
+	Nodes []Node
+}
+
+func (n LoopNode) VisitNode() variables.ValueNode {
+	for {
+		for _, node := range n.Nodes {
+			node.VisitNode()
+		}
+	}
+}
+
+func (n LoopNode) DisplayNode() {
+
+	for _, node := range n.Nodes {
+		node.DisplayNode()
+	}
 }

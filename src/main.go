@@ -1,31 +1,60 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"strings"
-
 	"Flow2.0/functions"
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/Parser"
+
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
 )
 
 var silent = false
 
 func mainProgram(code string) {
+	for {
+		fmt.Print(">>>")
+		reader := bufio.NewReader(os.Stdin)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+		if input == "run" {
+			Compile(code, false)
+			continue
+		}
+		if input == "console" {
+			fmt.Println("Welcome to Flow console")
+			fmt.Print(">>>")
+			program, _ := reader.ReadString('\n')
+			Compile(program, false)
+			continue
+		}
+		if input == "exit" {
+			break
+		}
+		if input == "file" {
+		} else {
+			fmt.Println("Invalid input")
+		}
+	}
+}
+
+var programPath string
+
+func Compile(code string, silent bool) {
 	/*
 	* Lexer
 	 */
 	lexer := Lexer.NewLexer(code)
 	var tokens = lexer.Lex()
 
+	fmt.Println("Output Tokens:")
 	if !silent {
-		fmt.Println("Output Tokens:")
-		for _, tok := range tokens {
-			fmt.Printf("Token: %-6s  Value: %s\n", tok.Type, tok.Value)
+		for _, token := range tokens {
+			fmt.Println(token)
 		}
 	}
-
 	/*
 	* Parser
 	 */
@@ -39,9 +68,6 @@ func mainProgram(code string) {
 	 */
 	ast.VisitNode()
 }
-
-var programPath string
-
 func main() {
 	if len(os.Args) > 1 {
 		programPath = os.Args[1]
@@ -53,5 +79,10 @@ func main() {
 	}
 	code := functions.ReadFile(programPath)
 	code = strings.TrimSpace(code)
-	mainProgram(code)
+	if silent {
+		Compile(code, true)
+	} else {
+		mainProgram(code)
+	}
+
 }

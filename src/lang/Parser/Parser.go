@@ -8,7 +8,7 @@ import (
 )
 
 /*
-Parser
+	Parser
 */
 
 type Parser struct {
@@ -37,8 +37,12 @@ func (p *Parser) nextToken() {
 */
 
 func (p *Parser) Statement() Node {
+
 	var current = p.current
 	switch p.current.Type {
+	/*
+		Variable
+	*/
 	case Lexer.CONST, Lexer.LET:
 		varType := p.current.Type
 		p.nextToken()
@@ -56,7 +60,9 @@ func (p *Parser) Statement() Node {
 			return VariableNode{Name: ident, Value: expression, Constant: true}
 		}
 		return VariableNode{Name: ident, Value: expression, Constant: false}
-
+	/*
+		Identifier
+	*/
 	case Lexer.IDENTIFIER:
 		ident := current.Value
 		p.nextToken()
@@ -66,6 +72,9 @@ func (p *Parser) Statement() Node {
 			return VariableAssignNode{Name: ident, Value: exprNode}
 		}
 		return VariableAccessNode{Name: ident}
+	/*
+		Println
+	*/
 	case Lexer.PRINTLN:
 		p.nextToken()
 		if p.current.Type != Lexer.LPAREN {
@@ -78,6 +87,22 @@ func (p *Parser) Statement() Node {
 		}
 		p.nextToken()
 		return PrintLnNode{exprNode}
+	case Lexer.LOOP:
+		p.nextToken()
+		var listNode []Node
+		if p.current.Type != Lexer.OpeningParen {
+			panic("Expected RPAREN but found" + current.Type)
+		}
+		p.nextToken()
+		for {
+			if p.current.Type == Lexer.ClosingParen {
+				break
+			} else {
+				listNode = append(listNode, p.Statement())
+			}
+		}
+		p.nextToken()
+		return LoopNode{Nodes: listNode}
 	default:
 		return p.expr()
 	}
@@ -98,7 +123,6 @@ func (p *Parser) factor() Node {
 		val, _ := strconv.ParseFloat(valueStr, 64)
 		p.nextToken()
 		return NumberNode{Value: val}
-
 	}
 	if tok.Type == Lexer.IDENTIFIER {
 		ident := tok.Value
@@ -113,9 +137,19 @@ func (p *Parser) factor() Node {
 		}
 		p.nextToken()
 		return exprNode
+	}
+	if tok.Type == Lexer.BOOL {
+		value := tok.Value
+		p.nextToken()
+		if value == "true" {
+			return BooleanNode{Value: true}
+		} else {
+			return BooleanNode{Value: false}
+		}
 	} else {
 		panic("Syntax Error: Expected VALUE but found " + tok.Type)
 	}
+
 }
 
 /*

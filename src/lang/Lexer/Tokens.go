@@ -8,11 +8,13 @@ const (
 	*/
 	INT   TokenType = "NUMBER"
 	FLOAT TokenType = "FLOAT"
+	BOOL  TokenType = "BOOL"
 	/*
 		Keywords
 	*/
 	LET   TokenType = "LET"
 	CONST TokenType = "CONST"
+	LOOP  TokenType = "LOOP"
 
 	/*
 		Functions
@@ -26,12 +28,14 @@ const (
 	/*
 		Math
 	*/
-	PLUS   TokenType = "PLUS"
-	MINUS  TokenType = "MINUS"
-	STAR   TokenType = "STAR"
-	SLASH  TokenType = "SLASH"
-	LPAREN TokenType = "LPAREN"
-	RPAREN TokenType = "RPAREN"
+	PLUS         TokenType = "PLUS"
+	MINUS        TokenType = "MINUS"
+	STAR         TokenType = "STAR"
+	SLASH        TokenType = "SLASH"
+	LPAREN       TokenType = "LPAREN"
+	RPAREN       TokenType = "RPAREN"
+	OpeningParen TokenType = "OPENING_PAREN"
+	ClosingParen TokenType = "CLOSING_PAREN"
 	/*
 		Parser Thingy
 	*/

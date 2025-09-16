@@ -65,6 +65,21 @@ func (l *Lexer) NextToken() Token {
 		case ')':
 			l.advance()
 			return Token{Type: RPAREN, Value: ")"}
+		case '#':
+			l.advance()
+			for {
+				if l.peek() == '\n' {
+					break
+				}
+				l.advance()
+			}
+		case '{':
+			l.advance()
+			return Token{Type: OpeningParen, Value: "{"}
+		case '}':
+			l.advance()
+			return Token{Type: ClosingParen, Value: "}"}
+
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
@@ -114,6 +129,12 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: PRINTLN, Value: "println"}
 	case "const":
 		return Token{Type: CONST, Value: "const"}
+	case "loop":
+		return Token{Type: LOOP, Value: "loop"}
+	case "true":
+		return Token{Type: BOOL, Value: "true"}
+	case "false":
+		return Token{Type: BOOL, Value: "false"}
 
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
