@@ -1,9 +1,8 @@
 package main
 
 import (
+	"Flow2.0/functions"
 	"os"
-
-	"Flow2.0/src/functions"
 )
 
 var silent = false

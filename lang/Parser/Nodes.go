@@ -3,15 +3,13 @@ package Parser
 import (
 	"fmt"
 
-	"Flow2.0/src/lang/Lexer"
-	"Flow2.0/src/lang/variables"
+	"Flow2.0/lang/Lexer"
+	"Flow2.0/lang/variables"
+	"Flow2.0/lang/shared"
 )
 
 // Node Main Program node /*
-type Node interface {
-	VisitNode() variables.ValueNode
-	DisplayNode()
-}
+
 
 /*
 	Number Node
@@ -64,9 +62,9 @@ func (n StringNode) DisplayNode() {
 */
 
 type BinaryOperationNode struct {
-	Left     Node
+	Left     shared.Node
 	Operator string
-	Right    Node
+	Right    shared.Node
 }
 
 func (n BinaryOperationNode) VisitNode() variables.ValueNode {
@@ -102,7 +100,7 @@ func (n BinaryOperationNode) DisplayNode() {
 */
 
 type ProgramNode struct {
-	statements []Node
+	statements []shared.Node
 }
 
 func (n ProgramNode) VisitNode() variables.ValueNode {
@@ -128,7 +126,7 @@ func (n ProgramNode) DisplayNode() {
 
 type VariableNode struct {
 	Name     string
-	Value    Node
+	Value    shared.Node
 	Constant bool
 }
 
@@ -189,7 +187,7 @@ func (n VariableAccessNode) DisplayNode() {
 
 type VariableAssignNode struct {
 	Name  string
-	Value Node
+	Value shared.Node
 }
 
 func (n VariableAssignNode) VisitNode() variables.ValueNode {
@@ -213,7 +211,7 @@ func (n VariableAssignNode) DisplayNode() {
 */
 
 type PrintLnNode struct {
-	Value Node
+	Value shared.Node
 }
 
 func (n PrintLnNode) VisitNode() variables.ValueNode {
@@ -239,7 +237,7 @@ func (n PrintLnNode) DisplayNode() {
 */
 
 type LoopNode struct {
-	Nodes []Node
+	Nodes []shared.Node
 }
 
 func (n LoopNode) VisitNode() variables.ValueNode {
@@ -262,8 +260,8 @@ Compare Node
 */
 
 type ComparisonNode struct {
-	Left  Node
-	Right Node
+	Left  shared.Node
+	Right shared.Node
 	Op    string
 }
 
@@ -293,8 +291,8 @@ func (n ComparisonNode) DisplayNode() {
 }
 
 type IfNode struct {
-	Expression Node
-	statements []Node
+	Expression shared.Node
+	statements []shared.Node
 }
 
 func (n IfNode) VisitNode() variables.ValueNode {

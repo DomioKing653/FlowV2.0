@@ -1,15 +1,14 @@
-package functions
+package shared
 
 import (
-	"fmt"
+    "fmt"
+    "os"
 )
 
 func Check(err error) {
 	if err != nil {
 		fmt.Print(err)
-		if Console {
-			mainProgram(publicCode)
-		}
+			os.Exit(0)
 	} else {
 		return
 	}

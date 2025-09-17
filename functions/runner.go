@@ -1,30 +1,29 @@
 package functions
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
-
-	"Flow2.0/src/lang/Lexer"
-	"Flow2.0/src/lang/Parser"
+    "Flow2.0/lang/Lexer"
+    "Flow2.0/lang/Parser"
+    "bufio"
+    "fmt"
+    "os"
+    "strings"
 )
 
 var Console bool
-var publicCode string
+var PublicCode string
 
 func Run(code string, silent bool) {
 	code = strings.TrimSpace(code)
-	publicCode = code
+	PublicCode = code
 	if silent {
 		Compile(code, true)
 	} else {
 		Console = true
-		mainProgram(code)
+		MainProgram(code)
 	}
 }
 
-func mainProgram(code string) {
+func MainProgram(code string) {
 	for {
 		fmt.Print(">>>")
 		reader := bufio.NewReader(os.Stdin)
