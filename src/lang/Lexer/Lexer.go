@@ -79,7 +79,15 @@ func (l *Lexer) NextToken() Token {
 		case '}':
 			l.advance()
 			return Token{Type: ClosingParen, Value: "}"}
-
+		case '>':
+			l.advance()
+			return Token{Type: GREATER, Value: ">"}
+		case '<':
+			l.advance()
+			return Token{Type: LESS, Value: "<"}
+		case '"':
+			l.advance()
+			return l.MakeString()
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
@@ -135,14 +143,25 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: BOOL, Value: "true"}
 	case "false":
 		return Token{Type: BOOL, Value: "false"}
+	case "fn":
+		return Token{Type: FUNCTION, Value: "fn"}
 
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}
 }
+func (l *Lexer) MakeString() Token {
+	start := l.pos
+	for l.peek() != '"' {
+		l.advance()
+	}
+	text := l.input[start:l.pos]
+	l.advance()
+	return Token{Type: STRING, Value: text}
+}
 
 /*
-Main Lexer Function
+	Main Lexer Function
 */
 
 func (l *Lexer) Lex() []Token {

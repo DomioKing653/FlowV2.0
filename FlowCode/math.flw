@@ -1,5 +1,7 @@
 let x = 50
-let bool = true
+let bool = 5<3
 x = x - 1
+const str = "test"
 println(x)
 println(bool)
+println(str)

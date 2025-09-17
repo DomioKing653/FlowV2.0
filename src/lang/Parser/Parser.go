@@ -71,6 +71,9 @@ func (p *Parser) Statement() Node {
 			exprNode := p.expr()
 			return VariableAssignNode{Name: ident, Value: exprNode}
 		}
+		if p.current.Type == Lexer.LPAREN {
+			p.nextToken()
+		}
 		return VariableAccessNode{Name: ident}
 	/*
 		Println
@@ -87,6 +90,9 @@ func (p *Parser) Statement() Node {
 		}
 		p.nextToken()
 		return PrintLnNode{exprNode}
+	/*
+		Loop
+	*/
 	case Lexer.LOOP:
 		p.nextToken()
 		var listNode []Node
@@ -109,8 +115,9 @@ func (p *Parser) Statement() Node {
 }
 
 /*
-Factor
+	Factor
 */
+
 func (p *Parser) factor() Node {
 	tok := p.current
 	if tok.Type == Lexer.INT {
@@ -146,10 +153,13 @@ func (p *Parser) factor() Node {
 		} else {
 			return BooleanNode{Value: false}
 		}
+	}
+	if tok.Type == Lexer.STRING {
+		p.nextToken()
+		return StringNode{Value: tok.Value}
 	} else {
 		panic("Syntax Error: Expected VALUE but found " + tok.Type)
 	}
-
 }
 
 /*
@@ -164,6 +174,15 @@ func (p *Parser) term() Node {
 			Left:     node,
 			Operator: op.Value,
 			Right:    p.factor(),
+		}
+	}
+	for p.current.Type == Lexer.GREATER || p.current.Type == Lexer.LESS {
+		op := p.current
+		p.nextToken()
+		node = ComparisonNode{
+			Left:  node,
+			Right: p.factor(),
+			Op:    op.Value,
 		}
 	}
 	return node
@@ -182,6 +201,16 @@ func (p *Parser) expr() Node {
 			Operator: op.Value,
 			Right:    p.term(),
 		}
+	}
+	for p.current.Type == Lexer.AND {
+		op := p.current
+		p.nextToken()
+		node = ComparisonNode{
+			Left:  node,
+			Right: p.term(),
+			Op:    op.Value,
+		}
+
 	}
 	return node
 }

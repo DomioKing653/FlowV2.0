@@ -45,6 +45,21 @@ func (n BooleanNode) DisplayNode() {
 }
 
 /*
+	String node
+*/
+
+type StringNode struct {
+	Value string
+}
+
+func (n StringNode) VisitNode() variables.ValueNode {
+	return variables.ValueNode{Type: Lexer.StringVariable, ValueStr: n.Value}
+}
+func (n StringNode) DisplayNode() {
+	fmt.Println(n.Value)
+}
+
+/*
 	Binary Operation Node
 */
 
@@ -243,4 +258,39 @@ func (n LoopNode) DisplayNode() {
 	for _, node := range n.Nodes {
 		node.DisplayNode()
 	}
+}
+
+/*
+Compare Node
+*/
+
+type ComparisonNode struct {
+	Left  Node
+	Right Node
+	Op    string
+}
+
+func (n ComparisonNode) VisitNode() variables.ValueNode {
+	left := n.Left.VisitNode()
+	right := n.Right.VisitNode()
+	if left.Type == Lexer.FloatVariable && right.Type == Lexer.FloatVariable {
+		switch n.Op {
+		case "<":
+			if left.NumberValue < right.NumberValue {
+				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true}
+			}
+			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false}
+		case ">":
+			if left.NumberValue > right.NumberValue {
+				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true}
+			}
+			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false}
+		}
+
+	}
+	panic("Left or right is not float variable")
+}
+
+func (n ComparisonNode) DisplayNode() {
+	fmt.Printf("{%s%s%v}\n", n.Left, n.Op, n.Right)
 }

@@ -6,16 +6,17 @@ const (
 	/*
 		Types
 	*/
-	INT   TokenType = "NUMBER"
-	FLOAT TokenType = "FLOAT"
-	BOOL  TokenType = "BOOL"
+	INT    TokenType = "NUMBER"
+	FLOAT  TokenType = "FLOAT"
+	BOOL   TokenType = "BOOL"
+	STRING TokenType = "STRING"
 	/*
 		Keywords
 	*/
-	LET   TokenType = "LET"
-	CONST TokenType = "CONST"
-	LOOP  TokenType = "LOOP"
-
+	LET      TokenType = "LET"
+	CONST    TokenType = "CONST"
+	LOOP     TokenType = "LOOP"
+	FUNCTION TokenType = "FN"
 	/*
 		Functions
 	*/
@@ -36,6 +37,12 @@ const (
 	RPAREN       TokenType = "RPAREN"
 	OpeningParen TokenType = "OPENING_PAREN"
 	ClosingParen TokenType = "CLOSING_PAREN"
+	/*
+		Logical operators
+	*/
+	GREATER TokenType = "GREATER"
+	LESS    TokenType = "LESS"
+	AND     TokenType = "AND"
 	/*
 		Parser Thingy
 	*/
