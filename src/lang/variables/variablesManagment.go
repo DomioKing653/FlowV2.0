@@ -1,6 +1,6 @@
 package variables
 
-import "Flow2.0/lang/Lexer"
+import "Flow2.0/src/lang/Lexer"
 
 var Variables map[string]*Variable
 

@@ -3,8 +3,8 @@ package Parser
 import (
 	"fmt"
 
-	"Flow2.0/lang/Lexer"
-	"Flow2.0/lang/variables"
+	"Flow2.0/src/lang/Lexer"
+	"Flow2.0/src/lang/variables"
 )
 
 // Node Main Program node /*
@@ -295,4 +295,12 @@ func (n ComparisonNode) DisplayNode() {
 type IfNode struct {
 	Expression Node
 	statements []Node
+}
+
+func (n IfNode) VisitNode() variables.ValueNode {
+
+	return n.Expression.VisitNode()
+}
+func (n IfNode) DisplayNode() {
+
 }

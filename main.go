@@ -1,14 +1,14 @@
 package main
 
 import (
-	"Flow2.0/functions"
-	"Flow2.0/lang/Lexer"
-	"Flow2.0/lang/Parser"
-
 	"bufio"
 	"fmt"
 	"os"
 	"strings"
+
+	"Flow2.0/src/functions"
+	"Flow2.0/src/lang/Lexer"
+	"Flow2.0/src/lang/Parser"
 )
 
 var silent = false
@@ -68,7 +68,7 @@ func Compile(code string, silent bool) {
 	 */
 	ast.VisitNode()
 }
-func main() {
+func Run() {
 	if len(os.Args) > 1 {
 		programPath = os.Args[1]
 		if len(os.Args) > 2 {
@@ -84,5 +84,8 @@ func main() {
 	} else {
 		mainProgram(code)
 	}
+}
 
+func main() {
+	Run()
 }

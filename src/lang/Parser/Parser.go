@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"Flow2.0/lang/Lexer"
+	"Flow2.0/src/lang/Lexer"
 )
 
 /*
@@ -109,12 +109,15 @@ func (p *Parser) Statement() Node {
 		}
 		p.nextToken()
 		return LoopNode{Nodes: listNode}
-	default:
-		return p.expr()
-	}
 	/*
 		IF
 	*/
+	case Lexer.IF:
+		panic("Expected IF but found" + current.Type)
+	default:
+		return p.expr()
+	}
+
 }
 
 /*
@@ -192,8 +195,8 @@ func (p *Parser) term() Node {
 }
 
 /*
-* Expression
- */
+Expression
+*/
 func (p *Parser) expr() Node {
 	node := p.term()
 	for p.current.Type == Lexer.PLUS || p.current.Type == Lexer.MINUS {
