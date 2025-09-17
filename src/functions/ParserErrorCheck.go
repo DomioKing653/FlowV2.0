@@ -1,4 +1,4 @@
-package Parser
+package functions
 
 import (
 	"fmt"
@@ -7,6 +7,9 @@ import (
 func Check(err error) {
 	if err != nil {
 		fmt.Print(err)
+		if Console {
+			mainProgram(publicCode)
+		}
 	} else {
 		return
 	}
