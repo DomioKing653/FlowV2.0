@@ -17,6 +17,7 @@ const (
 	CONST    TokenType = "CONST"
 	LOOP     TokenType = "LOOP"
 	FUNCTION TokenType = "FN"
+	IF       TokenType = "IF"
 	/*
 		Functions
 	*/

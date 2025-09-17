@@ -145,7 +145,8 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: BOOL, Value: "false"}
 	case "fn":
 		return Token{Type: FUNCTION, Value: "fn"}
-
+	case "if":
+		return Token{Type: IF, Value: "if"}
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}

@@ -112,6 +112,9 @@ func (p *Parser) Statement() Node {
 	default:
 		return p.expr()
 	}
+	/*
+		IF
+	*/
 }
 
 /*

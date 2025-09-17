@@ -148,8 +148,6 @@ func (n VariableNode) VisitNode() variables.ValueNode {
 		Constant: n.Constant,
 	}
 
-	return value
-
 	return n.Value.VisitNode()
 }
 
@@ -180,7 +178,6 @@ func (n VariableAccessNode) VisitNode() variables.ValueNode {
 	} else {
 		panic(fmt.Sprintf("Variable %s not found", n.Name))
 	}
-	return variables.Variables[n.Name].Value
 }
 func (n VariableAccessNode) DisplayNode() {
 	fmt.Printf("{%s}\n", n.Name)
@@ -293,4 +290,9 @@ func (n ComparisonNode) VisitNode() variables.ValueNode {
 
 func (n ComparisonNode) DisplayNode() {
 	fmt.Printf("{%s%s%v}\n", n.Left, n.Op, n.Right)
+}
+
+type IfNode struct {
+	Expression Node
+	statements []Node
 }
