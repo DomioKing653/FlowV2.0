@@ -116,7 +116,32 @@ func (p *Parser) Statement() (shared.Node,error) {
 		IF
 	*/
 	case Lexer.IF:
-		panic("Expected IF but found" + current.Type)
+		p.nextToken()
+		if p.current.Type != Lexer.LPAREN{
+			return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
+		}
+		p.nextToken()
+		exp:=p.expr()
+		p.nextToken()
+		if p.current.Type != Lexer.RPAREN{
+			return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
+		}
+		var stamtments []shared.Node
+		p.nextToken()
+		if p.current.Type != Lexer.OpeningParen{
+			return nil,errors.New("Expected OPENING PAREN but found:" + p.current.Value)
+		}
+		for{
+			if p.current.Type == Lexer.ClosingParen {
+				break
+			}else {
+				statment,err:=p.Statement()
+				shared.Check(err)
+				stamtments = append(stamtments,statment)
+				p.nextToken()
+			}
+		}
+		return IfNode{Expression: exp,statements: stamtments},nil
 	default:
 		return p.expr(),nil
 	}
