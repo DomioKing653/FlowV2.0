@@ -68,9 +68,9 @@ func Compile(code string, silent bool) {
 	 */
 	parser := Parser.NewParser(tokens)
 	ast := parser.Parse()
-	if !silent {
+	/*if !silent {
 		ast.DisplayNode()
-	}
+	/*}
 	/*
 	 * Interpreter
 	 */

@@ -1,0 +1,9 @@
+let x = 30 + 40
+println(x)
+const y = x > 23
+println(y)
+if(y){
+    println("wotking")
+}
+println("this will crash")
+println(y)

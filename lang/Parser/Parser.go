@@ -4,7 +4,6 @@ import (
     "Flow2.0/lang/Lexer"
     "Flow2.0/lang/shared"
     "errors"
-	"fmt"
 	"strconv"
     "strings"
 )
@@ -122,7 +121,6 @@ func (p *Parser) Statement() (shared.Node,error) {
 			return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
 		}
 		p.nextToken()
-		fmt.Print(p.current)
 		exprNode := p.expr()
 		if p.current.Type != Lexer.RPAREN {
 			return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
@@ -155,8 +153,6 @@ func (p *Parser) Statement() (shared.Node,error) {
 
 func (p *Parser) factor() (shared.Node,error) {
 	tok := p.current
-	fmt.Print("Factor")
-	fmt.Println(tok)
 	if tok.Type == Lexer.INT {
 		val, _ := strconv.ParseFloat(tok.Value, 64)
 		p.nextToken()
