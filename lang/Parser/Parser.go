@@ -4,7 +4,8 @@ import (
     "Flow2.0/lang/Lexer"
     "Flow2.0/lang/shared"
     "errors"
-    "strconv"
+	"fmt"
+	"strconv"
     "strings"
 )
 
@@ -29,7 +30,7 @@ func (p *Parser) nextToken() {
 	if p.pos < len(p.tokens) {
 		p.current = p.tokens[p.pos]
 	} else {
-		p.current = Lexer.Token{Type: Lexer.EOF, Value: ""}
+		p.current = Lexer.Token{Type: Lexer.EOF, Value: "EOF"}
 	}
 }
 
@@ -117,35 +118,35 @@ func (p *Parser) Statement() (shared.Node,error) {
 	*/
 	case Lexer.IF:
 		p.nextToken()
-		if p.current.Type != Lexer.LPAREN{
+		if p.current.Type != Lexer.LPAREN {
 			return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
 		}
 		p.nextToken()
-		exp:=p.expr()
-		p.nextToken()
-		if p.current.Type != Lexer.RPAREN{
+		fmt.Print(p.current)
+		exprNode := p.expr()
+		if p.current.Type != Lexer.RPAREN {
 			return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
 		}
-		var stamtments []shared.Node
 		p.nextToken()
+		var statments []shared.Node
 		if p.current.Type != Lexer.OpeningParen{
 			return nil,errors.New("Expected OPENING PAREN but found:" + p.current.Value)
 		}
+		p.nextToken()
 		for{
 			if p.current.Type == Lexer.ClosingParen {
 				break
 			}else {
 				statment,err:=p.Statement()
 				shared.Check(err)
-				stamtments = append(stamtments,statment)
-				p.nextToken()
+				statments = append(statments,statment)
 			}
 		}
-		return IfNode{Expression: exp,statements: stamtments},nil
+		p.nextToken()
+		return IfNode{Expression: exprNode,statements: statments},nil
 	default:
 		return p.expr(),nil
 	}
-
 }
 
 /*
@@ -154,6 +155,8 @@ func (p *Parser) Statement() (shared.Node,error) {
 
 func (p *Parser) factor() (shared.Node,error) {
 	tok := p.current
+	fmt.Print("Factor")
+	fmt.Println(tok)
 	if tok.Type == Lexer.INT {
 		val, _ := strconv.ParseFloat(tok.Value, 64)
 		p.nextToken()
@@ -228,7 +231,7 @@ func (p *Parser) term() shared.Node {
 }
 
 /*
-Expression
+	Expression
 */
 func (p *Parser) expr() shared.Node {
 	node := p.term()
@@ -249,7 +252,6 @@ func (p *Parser) expr() shared.Node {
 			Right: p.term(),
 			Op:    op.Value,
 		}
-
 	}
 	return node
 }

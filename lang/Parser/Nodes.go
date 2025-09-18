@@ -296,9 +296,20 @@ type IfNode struct {
 }
 
 func (n IfNode) VisitNode() variables.ValueNode {
-
+	if n.Expression.VisitNode().Type==Lexer.BooleanVariable{
+		if n.Expression.VisitNode().ValueBool{
+			for _,statment:=range n.statements{
+				statment.VisitNode()
+			}
+		}
+	}
 	return n.Expression.VisitNode()
 }
 func (n IfNode) DisplayNode() {
-
+	fmt.Print("if(")
+	n.Expression.DisplayNode()
+	fmt.Print(")")
+	for _, node := range n.statements {
+		node.DisplayNode()
+	}
 }
