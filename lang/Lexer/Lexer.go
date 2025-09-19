@@ -147,6 +147,9 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: FUNCTION, Value: "fn"}
 	case "if":
 		return Token{Type: IF, Value: "if"}
+	case "while":
+		return Token{Type:WHILE,Value: "while"}
+
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}

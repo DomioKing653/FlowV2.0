@@ -134,10 +134,7 @@ type VariableNode struct {
 
 func (n VariableNode) VisitNode() (variables.ValueNode,error) {
 	if _, ok := variables.Variables[n.Name]; ok {
-		panic("Variable already exists")
-	}
-	if _, ok := variables.Variables[n.Name]; ok {
-		panic("Variable already exists")
+		return variables.ValueNode{},errors.New("variable alredy exists")
 	}
 
 	value,err := n.Value.VisitNode()
@@ -338,12 +335,12 @@ func (n IfNode) DisplayNode() {
 	while node
 */
 
-type WhileNpde struct {
+type WhileNode struct {
 	Expression shared.Node
 	Statments  []shared.Node
 }
 
-func (n WhileNpde) VisitNode() (variables.ValueNode,error)  {
+func (n WhileNode) VisitNode() (variables.ValueNode,error)  {
 	expr,err:=n.Expression.VisitNode()
 	CheckRuntimeErr(err)
 	if expr.Type==Lexer.BooleanVariable{
@@ -352,11 +349,22 @@ func (n WhileNpde) VisitNode() (variables.ValueNode,error)  {
 				break
 			}else{
 				for _,statment:= range n.Statments{
-					_,err:=statment.VisitNode()
+					breaker,err:=statment.VisitNode()
+					CheckRuntimeErr(err)
+					if breaker.Breaking{
+						break
+					}
+					expr,err=n.Expression.VisitNode()
 					CheckRuntimeErr(err)
 				}
 			}
 		}
+	}else {
+		return variables.ValueNode{},errors.New("expression is not boolean")
 	}
 	return expr,nil
+}
+
+func (n WhileNode) DisplayNode()  {
+	print("idk")
 }

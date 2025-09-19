@@ -18,6 +18,7 @@ const (
 	LOOP     TokenType = "LOOP"
 	FUNCTION TokenType = "FN"
 	IF       TokenType = "IF"
+	WHILE  	 TokenType = "WHILE"
 	/*
 		Functions
 	*/

@@ -7,3 +7,8 @@ if(y){
 }
 println("this will crash")
 println(y)
+let i = 5
+while(i>0){
+    println(i)
+    i=i-1
+}

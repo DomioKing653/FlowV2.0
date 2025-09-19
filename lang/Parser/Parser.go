@@ -142,6 +142,33 @@ func (p *Parser) Statement() (shared.Node,error) {
 		}
 		p.nextToken()
 		return IfNode{Expression: exprNode,statements: statments},nil
+		case Lexer.WHILE:
+			p.nextToken()
+			if p.current.Type != Lexer.LPAREN {
+				return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
+			}
+			p.nextToken()
+			exprNode := p.expr()
+			if p.current.Type != Lexer.RPAREN {
+				return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
+			}
+			p.nextToken()
+			var statments []shared.Node
+			if p.current.Type != Lexer.OpeningParen{
+				return nil,errors.New("Expected OPENING PAREN but found:" + p.current.Value)
+			}
+			p.nextToken()
+			for{
+				if p.current.Type == Lexer.ClosingParen {
+					break
+				}else {
+					statment,err:=p.Statement()
+					shared.Check(err)
+					statments = append(statments,statment)
+				}
+			}
+			p.nextToken()
+			return WhileNode{Expression: exprNode,Statments: statments},nil
 	default:
 		return p.expr(),nil
 	}
