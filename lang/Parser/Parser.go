@@ -142,6 +142,7 @@ func (p *Parser) Statement() (shared.Node,error) {
 		}
 		p.nextToken()
 		return IfNode{Expression: exprNode,statements: statments},nil
+
 		case Lexer.WHILE:
 			p.nextToken()
 			if p.current.Type != Lexer.LPAREN {
@@ -161,6 +162,9 @@ func (p *Parser) Statement() (shared.Node,error) {
 			for{
 				if p.current.Type == Lexer.ClosingParen {
 					break
+				}
+				if p.current.Type==Lexer.EOF{
+					return nil,errors.New("expected closing paren but found EOF")
 				}else {
 					statment,err:=p.Statement()
 					shared.Check(err)
@@ -169,6 +173,29 @@ func (p *Parser) Statement() (shared.Node,error) {
 			}
 			p.nextToken()
 			return WhileNode{Expression: exprNode,Statments: statments},nil
+	/*
+		Function
+	*/
+	case Lexer.FUNCTION:
+		p.nextToken()
+		if p.current.Type != Lexer.IDENTIFIER {
+			return nil, errors.New("expected identifier")
+		}
+		var identifier string = p.current.Value
+		p.nextToken()
+		if p.current.Type != Lexer.LPAREN{
+			return nil, errors.New("expected left paren")
+		}
+		p.nextToken()
+		for{
+			if p.current.Type==Lexer.RPAREN{
+				break
+			}
+			if p.current.Type==Lexer.EOF{
+				return nil,errors.New("expected right paren but found EOF")
+			}
+		}
+		return FunctionNode{id: identifier},nil
 	default:
 		return p.expr(),nil
 	}

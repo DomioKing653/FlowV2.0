@@ -8,6 +8,7 @@ import (
 	"fmt"
 )
 
+
 /*
 	Number Node
 */
@@ -20,7 +21,7 @@ func (n NumberNode) VisitNode() (variables.ValueNode,error) {
 	return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: n.Value},nil
 }
 func (n NumberNode) DisplayNode() {
-	fmt.Println(n.Value)
+	fmt.Println('{'+n.Value+'}')
 }
 
 /*
@@ -263,7 +264,7 @@ func (n LoopNode) DisplayNode() {
 }
 
 /*
-Compare Node
+	Compare Node
 */
 
 type ComparisonNode struct {
@@ -349,11 +350,8 @@ func (n WhileNode) VisitNode() (variables.ValueNode,error)  {
 				break
 			}else{
 				for _,statment:= range n.Statments{
-					breaker,err:=statment.VisitNode()
+					_,err:=statment.VisitNode()
 					CheckRuntimeErr(err)
-					if breaker.Breaking{
-						break
-					}
 					expr,err=n.Expression.VisitNode()
 					CheckRuntimeErr(err)
 				}
@@ -367,4 +365,29 @@ func (n WhileNode) VisitNode() (variables.ValueNode,error)  {
 
 func (n WhileNode) DisplayNode()  {
 	print("idk")
+}
+
+/*
+	Function Node
+*/
+
+type FunctionNode struct {
+	args 		[]string
+	id   		string
+	statments   []shared.Node
+}
+
+func (n FunctionNode) VisitNode() (variables.ValueNode,error)  {
+	for _,args:=range n.args{
+		variables.Variables[args] = &variables.Variable{
+			Value:    variables.ValueNode{},
+			Type:     Lexer.NilVariable,
+			Constant: false,
+		}
+	}
+	return variables.ValueNode{},nil
+}
+
+func (n FunctionNode)DisplayNode()  {
+	fmt.Println("idk")
 }

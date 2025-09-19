@@ -7,8 +7,8 @@ import (
 
 func Check(err error) {
 	if err != nil {
-		fmt.Print(err)
-		os.Exit(0)
+		fmt.Print("Synatax error"+err.Error())
+		os.Exit(-1)
 	} else {
 		return
 	}
