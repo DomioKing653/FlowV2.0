@@ -4,4 +4,4 @@ factor  ->         FLOAT|INT|ID
 statement-> LET IDENT ASSIGN expr |
             IDENT ASSIGN EXPR     |
             expr                  |
-            FN IDENT ARGS STATMENT|S
+            FN IDENT ARGS STATMENT|

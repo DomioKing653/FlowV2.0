@@ -1,4 +1,4 @@
-package variables
+package env
 
 import "Flow2.0/lang/Lexer"
 
