@@ -383,7 +383,6 @@ func (n FunctionNode) VisitNode() (env.ValueNode, error) {
 		Nodes: n.statments,
 		Args:  n.args,
 	}
-
 	return env.ValueNode{}, nil
 }
 
@@ -408,8 +407,14 @@ func (n *FunctionCallNode) VisitNode() (env.ValueNode, error) {
 				CheckRuntimeErr(err)
 				env.Variables[function.Args[idx]] = &env.Variable{Value: value, Constant: false, Type: value.Type}
 			}
+			for _, node := range function.Nodes {
+				node.VisitNode()
+			}
+		} else {
+			return env.ValueNode{}, errors.New("unexpected number of arguments")
 		}
-
+	} else {
+		return env.ValueNode{}, errors.New("function not found")
 	}
 	return env.ValueNode{}, nil
 }

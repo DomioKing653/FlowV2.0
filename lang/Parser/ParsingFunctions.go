@@ -119,7 +119,6 @@ func (p *Parser) ParseLoop() (shared.Node, error) {
 */
 
 func (p *Parser) ParseFunction() (shared.Node, error) {
-	var needArg = false
 	p.nextToken()
 	if p.current.Type != Lexer.IDENTIFIER {
 		return nil, errors.New("expected identifier in function defiition")
@@ -131,33 +130,26 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 	}
 	p.nextToken()
 	var arguments []string
-	for {
+	for p.current.Type != Lexer.RPAREN {
 		if p.current.Type == Lexer.EOF {
 			return nil, errors.New("unexpected EOF in function definition")
-		} else {
-			if p.current.Type == Lexer.IDENTIFIER {
-				arguments = append(arguments, p.current.Value)
-				p.nextToken()
-				if p.current.Type == Lexer.RPAREN {
-					needArg = false
-					break
-				}
-				if p.current.Type == Lexer.COMMA {
-					needArg = true
-					continue
-				}
-			} else {
-				if !needArg {
-					if p.current.Type == Lexer.RPAREN {
-						break
-					}
-				} else {
-					return nil, errors.New("error while parsing arguments")
-				}
-			}
+		}
+
+		if p.current.Type != Lexer.IDENTIFIER {
+			return nil, errors.New("expected identifier in argument list")
+		}
+
+		arguments = append(arguments, p.current.Value)
+		p.nextToken()
+
+		if p.current.Type == Lexer.COMMA {
+			p.nextToken() // posun na další identifikátor
+		} else if p.current.Type != Lexer.RPAREN {
+			return nil, errors.New("expected comma or closing paren after argument")
 		}
 	}
 	p.nextToken()
+
 	var statments []shared.Node
 	if p.current.Type != Lexer.OpeningParen {
 		return nil, errors.New("expected openning paren")
@@ -171,7 +163,11 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 			shared.Check(err)
 			statments = append(statments, statment)
 		}
+		if p.current.Type == Lexer.EOF {
+			return nil, errors.New("error while parsing function")
+		}
 	}
+
 	p.nextToken()
 	return FunctionNode{args: arguments, statments: statments, id: id}, nil
 }
