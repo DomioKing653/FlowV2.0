@@ -1,12 +1,13 @@
-package functions
+package tools
 
 import (
-    "Flow2.0/lang/Lexer"
-    "Flow2.0/lang/Parser"
-    "bufio"
-    "fmt"
-    "os"
-    "strings"
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+
+	"Flow2.0/lang/Lexer"
+	"Flow2.0/lang/Parser"
 )
 
 var Console bool
@@ -73,6 +74,6 @@ func Compile(code string, silent bool) {
 	/*}
 	/*
 	 * Interpreter
-	 */
+	*/
 	ast.VisitNode()
 }

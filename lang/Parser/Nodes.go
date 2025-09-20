@@ -1,13 +1,13 @@
 package Parser
 
 import (
+	"errors"
+	"fmt"
+
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/shared"
 	"Flow2.0/lang/variables"
-	"errors"
-	"fmt"
 )
-
 
 /*
 	Number Node
@@ -17,11 +17,11 @@ type NumberNode struct {
 	Value float64
 }
 
-func (n NumberNode) VisitNode() (variables.ValueNode,error) {
-	return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: n.Value},nil
+func (n NumberNode) VisitNode() (variables.ValueNode, error) {
+	return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: n.Value}, nil
 }
 func (n NumberNode) DisplayNode() {
-	fmt.Println('{'+n.Value+'}')
+	fmt.Println('{' + n.Value + '}')
 }
 
 /*
@@ -32,8 +32,8 @@ type BooleanNode struct {
 	Value bool
 }
 
-func (n BooleanNode) VisitNode() (variables.ValueNode,error) {
-	return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: n.Value},nil
+func (n BooleanNode) VisitNode() (variables.ValueNode, error) {
+	return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: n.Value}, nil
 }
 
 func (n BooleanNode) DisplayNode() {
@@ -48,8 +48,8 @@ type StringNode struct {
 	Value string
 }
 
-func (n StringNode) VisitNode() (variables.ValueNode,error) {
-	return variables.ValueNode{Type: Lexer.StringVariable, ValueStr: n.Value},nil
+func (n StringNode) VisitNode() (variables.ValueNode, error) {
+	return variables.ValueNode{Type: Lexer.StringVariable, ValueStr: n.Value}, nil
 }
 func (n StringNode) DisplayNode() {
 	fmt.Println(n.Value)
@@ -65,30 +65,30 @@ type BinaryOperationNode struct {
 	Right    shared.Node
 }
 
-func (n BinaryOperationNode) VisitNode() (variables.ValueNode,error) {
+func (n BinaryOperationNode) VisitNode() (variables.ValueNode, error) {
 	var leftValue float64 = 0
 	var rightValue float64 = 0
-	lftVal,err:=n.Left.VisitNode()
+	lftVal, err := n.Left.VisitNode()
 	CheckRuntimeErr(err)
 	if lftVal.Type == Lexer.FloatVariable {
 		leftValue = lftVal.NumberValue
-		rghtVal,err:=n.Right.VisitNode()
+		rghtVal, err := n.Right.VisitNode()
 		shared.Check(err)
 		if rghtVal.Type == Lexer.FloatVariable {
 			rightValue = rghtVal.NumberValue
 		}
 	} else {
-		return variables.ValueNode{},errors.New("LEFT or RIGHT isnt number")
+		return variables.ValueNode{}, errors.New("LEFT or RIGHT isnt number")
 	}
 	switch n.Operator {
 	case "+":
-		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue + rightValue, ValueStr: "", ValueBool: false},nil
+		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue + rightValue, ValueStr: "", ValueBool: false}, nil
 	case "-":
-		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue - rightValue, ValueStr: "", ValueBool: false},nil
+		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue - rightValue, ValueStr: "", ValueBool: false}, nil
 	case "*":
-		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue * rightValue, ValueStr: "", ValueBool: false},nil
+		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue * rightValue, ValueStr: "", ValueBool: false}, nil
 	case "/":
-		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue / rightValue, ValueStr: "", ValueBool: false},nil
+		return variables.ValueNode{Type: Lexer.FloatVariable, NumberValue: leftValue / rightValue, ValueStr: "", ValueBool: false}, nil
 	default:
 		panic("Unknown operator")
 	}
@@ -105,13 +105,13 @@ type ProgramNode struct {
 	statements []shared.Node
 }
 
-func (n ProgramNode) VisitNode() (variables.ValueNode,error) {
+func (n ProgramNode) VisitNode() (variables.ValueNode, error) {
 	variables.Init()
 	for _, statement := range n.statements {
-		_,err:=statement.VisitNode()
+		_, err := statement.VisitNode()
 		CheckRuntimeErr(err)
 	}
-	return variables.ValueNode{},nil
+	return variables.ValueNode{}, nil
 }
 func (n ProgramNode) DisplayNode() {
 	fmt.Printf("Program{\n")
@@ -133,12 +133,12 @@ type VariableNode struct {
 	Constant bool
 }
 
-func (n VariableNode) VisitNode() (variables.ValueNode,error) {
+func (n VariableNode) VisitNode() (variables.ValueNode, error) {
 	if _, ok := variables.Variables[n.Name]; ok {
-		return variables.ValueNode{},errors.New("variable alredy exists")
+		return variables.ValueNode{}, errors.New("variable alredy exists")
 	}
 
-	value,err := n.Value.VisitNode()
+	value, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 
 	variables.Variables[n.Name] = &variables.Variable{
@@ -146,13 +146,13 @@ func (n VariableNode) VisitNode() (variables.ValueNode,error) {
 		Type:     value.Type,
 		Constant: n.Constant,
 	}
-	val,err:=n.Value.VisitNode()
+	val, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
-	return val,nil
+	return val, nil
 }
 
 func (n VariableNode) DisplayNode() {
-	val,err:=n.Value.VisitNode()
+	val, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 	switch val.Type {
 	case Lexer.FloatVariable:
@@ -173,10 +173,10 @@ type VariableAccessNode struct {
 	Name string
 }
 
-func (n VariableAccessNode) VisitNode() (variables.ValueNode,error) {
+func (n VariableAccessNode) VisitNode() (variables.ValueNode, error) {
 	variable, ok := variables.Variables[n.Name]
 	if ok {
-		return variable.Value,nil
+		return variable.Value, nil
 	} else {
 		panic(fmt.Sprintf("Variable %s not found", n.Name))
 	}
@@ -194,19 +194,19 @@ type VariableAssignNode struct {
 	Value shared.Node
 }
 
-func (n VariableAssignNode) VisitNode() (variables.ValueNode,error) {
+func (n VariableAssignNode) VisitNode() (variables.ValueNode, error) {
 	variable, ok := variables.Variables[n.Name]
 	if !ok {
-		return variables.ValueNode{},errors.New("variable not found")
+		return variables.ValueNode{}, errors.New("variable not found")
 
 	}
-	if variable.Constant == true {
-		return variables.ValueNode{},errors.New("variable is constant")
+	if variable.Constant {
+		return variables.ValueNode{}, errors.New("variable is constant")
 	}
-	value,err := n.Value.VisitNode()
+	value, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 	variable.Value = value
-	return value,nil
+	return value, nil
 }
 func (n VariableAssignNode) DisplayNode() {
 	fmt.Printf("{%s=%v}\n", n.Name, n.Value)
@@ -220,8 +220,8 @@ type PrintLnNode struct {
 	Value shared.Node
 }
 
-func (n PrintLnNode) VisitNode() (variables.ValueNode,error) {
-	value,err := n.Value.VisitNode()
+func (n PrintLnNode) VisitNode() (variables.ValueNode, error) {
+	value, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 	switch value.Type {
 	case Lexer.StringVariable:
@@ -232,7 +232,7 @@ func (n PrintLnNode) VisitNode() (variables.ValueNode,error) {
 		fmt.Println(value.NumberValue)
 	}
 
-	return value,nil
+	return value, nil
 }
 
 func (n PrintLnNode) DisplayNode() {
@@ -247,10 +247,10 @@ type LoopNode struct {
 	Nodes []shared.Node
 }
 
-func (n LoopNode) VisitNode() (variables.ValueNode,error) {
+func (n LoopNode) VisitNode() (variables.ValueNode, error) {
 	for {
 		for _, node := range n.Nodes {
-			_,err :=node.VisitNode()
+			_, err := node.VisitNode()
 			CheckRuntimeErr(err)
 		}
 	}
@@ -273,27 +273,27 @@ type ComparisonNode struct {
 	Op    string
 }
 
-func (n ComparisonNode) VisitNode() (variables.ValueNode,error) {
-	left,err := n.Left.VisitNode()
+func (n ComparisonNode) VisitNode() (variables.ValueNode, error) {
+	left, err := n.Left.VisitNode()
 	CheckRuntimeErr(err)
-	right,err := n.Right.VisitNode()
+	right, err := n.Right.VisitNode()
 	CheckRuntimeErr(err)
 	if left.Type == Lexer.FloatVariable && right.Type == Lexer.FloatVariable {
 		switch n.Op {
 		case "<":
 			if left.NumberValue < right.NumberValue {
-				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true},nil
+				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true}, nil
 			}
-			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false},nil
+			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false}, nil
 		case ">":
 			if left.NumberValue > right.NumberValue {
-				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true},nil
+				return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: true}, nil
 			}
-			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false},nil
+			return variables.ValueNode{Type: Lexer.BooleanVariable, ValueBool: false}, nil
 		}
 
 	}
-	return variables.ValueNode{},errors.New("left or right isnt float")
+	return variables.ValueNode{}, errors.New("left or right isnt float")
 }
 
 func (n ComparisonNode) DisplayNode() {
@@ -301,7 +301,7 @@ func (n ComparisonNode) DisplayNode() {
 }
 
 /*
- 	If node
+	If node
 */
 
 type IfNode struct {
@@ -309,20 +309,20 @@ type IfNode struct {
 	statements []shared.Node
 }
 
-func (n IfNode) VisitNode() (variables.ValueNode,error) {
-	expr,err:=n.Expression.VisitNode()
+func (n IfNode) VisitNode() (variables.ValueNode, error) {
+	expr, err := n.Expression.VisitNode()
 	CheckRuntimeErr(err)
-	if expr.Type==Lexer.BooleanVariable{
-		expr,err=n.Expression.VisitNode()
+	if expr.Type == Lexer.BooleanVariable {
+		expr, err = n.Expression.VisitNode()
 		CheckRuntimeErr(err)
-		if expr.ValueBool{
-			for _,statment:=range n.statements{
-				_,err:=statment.VisitNode()
+		if expr.ValueBool {
+			for _, statment := range n.statements {
+				_, err := statment.VisitNode()
 				CheckRuntimeErr(err)
 			}
 		}
 	}
-	return variables.ValueNode{},nil
+	return variables.ValueNode{}, nil
 }
 func (n IfNode) DisplayNode() {
 	fmt.Print("if(")
@@ -332,6 +332,7 @@ func (n IfNode) DisplayNode() {
 		node.DisplayNode()
 	}
 }
+
 /*
 	while node
 */
@@ -341,29 +342,29 @@ type WhileNode struct {
 	Statments  []shared.Node
 }
 
-func (n WhileNode) VisitNode() (variables.ValueNode,error)  {
-	expr,err:=n.Expression.VisitNode()
+func (n WhileNode) VisitNode() (variables.ValueNode, error) {
+	expr, err := n.Expression.VisitNode()
 	CheckRuntimeErr(err)
-	if expr.Type==Lexer.BooleanVariable{
-		for{
-			if !expr.ValueBool{
+	if expr.Type == Lexer.BooleanVariable {
+		for {
+			if !expr.ValueBool {
 				break
-			}else{
-				for _,statment:= range n.Statments{
-					_,err:=statment.VisitNode()
+			} else {
+				for _, statment := range n.Statments {
+					_, err := statment.VisitNode()
 					CheckRuntimeErr(err)
-					expr,err=n.Expression.VisitNode()
+					expr, err = n.Expression.VisitNode()
 					CheckRuntimeErr(err)
 				}
 			}
 		}
-	}else {
-		return variables.ValueNode{},errors.New("expression is not boolean")
+	} else {
+		return variables.ValueNode{}, errors.New("expression is not boolean")
 	}
-	return expr,nil
+	return expr, nil
 }
 
-func (n WhileNode) DisplayNode()  {
+func (n WhileNode) DisplayNode() {
 	print("idk")
 }
 
@@ -372,22 +373,35 @@ func (n WhileNode) DisplayNode()  {
 */
 
 type FunctionNode struct {
-	args 		[]string
-	id   		string
-	statments   []shared.Node
+	args      []string
+	id        string
+	statments []shared.Node
 }
 
-func (n FunctionNode) VisitNode() (variables.ValueNode,error)  {
-	for _,args:=range n.args{
+func (n FunctionNode) VisitNode() (variables.ValueNode, error) {
+	for _, args := range n.args {
 		variables.Variables[args] = &variables.Variable{
 			Value:    variables.ValueNode{},
 			Type:     Lexer.NilVariable,
 			Constant: false,
 		}
 	}
-	return variables.ValueNode{},nil
+	return variables.ValueNode{}, nil
 }
 
-func (n FunctionNode)DisplayNode()  {
+func (n FunctionNode) DisplayNode() {
 	fmt.Println("idk")
+}
+
+/*
+	Function call node
+*/
+
+type FunctionCallNode struct {
+	args []shared.Node
+	id   string
+}
+
+func (p *FunctionCallNode) VisitNode() (variables.ValueNode, error) {
+	return variables.ValueNode{}, nil
 }

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"Flow2.0/functions"
 	"os"
+
+	"Flow2.0/tools"
 )
 
 var silent = false
@@ -17,6 +18,6 @@ func main() {
 			}
 		}
 	}
-	code := functions.ReadFile(programPath)
-	functions.Run(code, silent)
+	code := tools.ReadFile(programPath)
+	tools.Run(code, silent)
 }
