@@ -3,12 +3,20 @@ println(x)
 const y = x > 23
 println(y)
 if(y){
-    println("wotking")
+    println("working")
 }
-println("this will crash")
 println(y)
 let i = 5
 while(i>0){
     println(i)
     i=i-1
+}
+
+const foo = 10.5
+const bar = 5 + foo
+println(bar)
+
+
+fn function(f,){
+
 }

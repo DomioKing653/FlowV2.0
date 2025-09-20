@@ -80,122 +80,27 @@ func (p *Parser) Statement() (shared.Node,error) {
 		Println
 	*/
 	case Lexer.PRINTLN:
-		p.nextToken()
-		if p.current.Type != Lexer.LPAREN {
-			return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		exprNode := p.expr()
-		if p.current.Type != Lexer.RPAREN {
-			return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		return PrintLnNode{exprNode},nil
+		return p.ParsePrintLn()
 	/*
 		Loop
 	*/
 	case Lexer.LOOP:
-		p.nextToken()
-		var listNode []shared.Node
-		if p.current.Type != Lexer.OpeningParen {
-			return nil,errors.New("Expected OPPENING PAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		for {
-			if p.current.Type == Lexer.ClosingParen {
-				break
-			} else {
-				stmt,err:=p.Statement()
-				shared.Check(err)
-				listNode = append(listNode, stmt)
-			}
-		}
-		p.nextToken()
-		return LoopNode{Nodes: listNode},nil
+		return p.ParseLoop()
 	/*
 		IF
 	*/
 	case Lexer.IF:
-		p.nextToken()
-		if p.current.Type != Lexer.LPAREN {
-			return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		exprNode := p.expr()
-		if p.current.Type != Lexer.RPAREN {
-			return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		var statments []shared.Node
-		if p.current.Type != Lexer.OpeningParen{
-			return nil,errors.New("Expected OPENING PAREN but found:" + p.current.Value)
-		}
-		p.nextToken()
-		for{
-			if p.current.Type == Lexer.ClosingParen {
-				break
-			}else {
-				statment,err:=p.Statement()
-				shared.Check(err)
-				statments = append(statments,statment)
-			}
-		}
-		p.nextToken()
-		return IfNode{Expression: exprNode,statements: statments},nil
+		return p.ParseIf()
 
-		case Lexer.WHILE:
-			p.nextToken()
-			if p.current.Type != Lexer.LPAREN {
-				return nil,errors.New("Expected LPAREN but found:" + p.current.Value)
-			}
-			p.nextToken()
-			exprNode := p.expr()
-			if p.current.Type != Lexer.RPAREN {
-				return nil,errors.New("Expected RPAREN but found:" + p.current.Value)
-			}
-			p.nextToken()
-			var statments []shared.Node
-			if p.current.Type != Lexer.OpeningParen{
-				return nil,errors.New("Expected OPENING PAREN but found:" + p.current.Value)
-			}
-			p.nextToken()
-			for{
-				if p.current.Type == Lexer.ClosingParen {
-					break
-				}
-				if p.current.Type==Lexer.EOF{
-					return nil,errors.New("expected closing paren but found EOF")
-				}else {
-					statment,err:=p.Statement()
-					shared.Check(err)
-					statments = append(statments,statment)
-				}
-			}
-			p.nextToken()
-			return WhileNode{Expression: exprNode,Statments: statments},nil
+	case Lexer.WHILE:
+		whilenode,err:=p.ParseWhile()
+		shared.Check(err)
+		return whilenode,nil
 	/*
 		Function
 	*/
 	case Lexer.FUNCTION:
-		p.nextToken()
-		if p.current.Type != Lexer.IDENTIFIER {
-			return nil, errors.New("expected identifier")
-		}
-		var identifier string = p.current.Value
-		p.nextToken()
-		if p.current.Type != Lexer.LPAREN{
-			return nil, errors.New("expected left paren")
-		}
-		p.nextToken()
-		for{
-			if p.current.Type==Lexer.RPAREN{
-				break
-			}
-			if p.current.Type==Lexer.EOF{
-				return nil,errors.New("expected right paren but found EOF")
-			}
-		}
-		return FunctionNode{id: identifier},nil
+		return p.ParseFunction()
 	default:
 		return p.expr(),nil
 	}
@@ -250,8 +155,8 @@ func (p *Parser) factor() (shared.Node,error) {
 }
 
 /*
-* Term
- */
+	 Term
+*/
 func (p *Parser) term() shared.Node {
 	node,err := p.factor()
 	shared.Check(err)

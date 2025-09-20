@@ -88,6 +88,8 @@ func (l *Lexer) NextToken() Token {
 		case '"':
 			l.advance()
 			return l.MakeString()
+		case ',':
+			return Token{Type:COMMA,Value: ","}
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
@@ -105,11 +107,11 @@ func (l *Lexer) MakeNumber() Token {
 	for {
 		if unicode.IsDigit(l.peek()) {
 			l.advance()
-		} else if l.peek() == ',' && hasDot == false {
+		} else if l.peek() == '.' && hasDot == false {
 			hasDot = true
 			l.advance()
-		} else if l.peek() == ',' && hasDot == true {
-			panic("Dot not allowed in number")
+		} else if l.peek() == '.' && hasDot == true {
+			panic("can't have more than one dot in a number")
 		} else {
 			break
 		}

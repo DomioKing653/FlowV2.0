@@ -40,6 +40,7 @@ const (
 	RPAREN       TokenType = "RPAREN"
 	OpeningParen TokenType = "OPENING_PAREN"
 	ClosingParen TokenType = "CLOSING_PAREN"
+	COMMA      	 TokenType = "COMMA"
 	/*
 		Logical operators
 	*/
