@@ -401,6 +401,7 @@ type FunctionCallNode struct {
 }
 
 func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
+	fmt.Println(n.id)
 	if function, ok := shared.Functions[n.id]; ok {
 		if len(n.Args) == len(function.Args) {
 			for idx := range function.Args {

@@ -196,13 +196,11 @@ func (p *Parser) ParseIdentifier() (shared.Node, error) {
 		return VariableAssignNode{Name: ident, Value: exprNode}, nil
 	}
 	if p.current.Type == Lexer.LPAREN {
-		return p.ParseFunctionCall()
-
+		return p.ParseFunctionCall(ident)
 	}
 	return VariableAccessNode{Name: ident}, nil
 }
-func (p *Parser) ParseFunctionCall() (shared.Node, error) {
-	ident := p.current.Value
+func (p *Parser) ParseFunctionCall(ident string) (shared.Node, error) {
 	var needArg bool = false
 	p.nextToken()
 	var args []shared.Node
