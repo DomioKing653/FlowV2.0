@@ -205,7 +205,6 @@ func (p *Parser) ParseFunctionCall(ident string) (shared.Node, error) {
 	p.nextToken()
 	var args []shared.Node
 	for {
-
 		if p.current.Type == Lexer.EOF {
 			return nil, errors.New("unexpected EOF in function definition")
 		} else {
@@ -213,6 +212,7 @@ func (p *Parser) ParseFunctionCall(ident string) (shared.Node, error) {
 				break
 			} else {
 				value := p.expr()
+				needArg = false
 				args = append(args, value)
 				if p.current.Type == Lexer.COMMA {
 					p.nextToken()

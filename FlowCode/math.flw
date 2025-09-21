@@ -16,7 +16,7 @@ const foo = 10.5
 const bar = 5 + foo
 println(bar)
 
-fn test(cislo,idk){
+fn test(cislo){
     println(cislo)
 }
 
