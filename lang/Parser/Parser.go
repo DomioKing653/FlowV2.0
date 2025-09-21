@@ -2,7 +2,6 @@ package Parser
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -201,7 +200,6 @@ func (p *Parser) expr() shared.Node {
 	return node
 }
 func (p *Parser) Parse() shared.Node {
-	fmt.Println("starting to parse")
 	program := ProgramNode{}
 	for {
 		if p.current.Type == Lexer.EOF {

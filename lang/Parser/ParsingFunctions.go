@@ -2,7 +2,6 @@ package Parser
 
 import (
 	"errors"
-	"fmt"
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/shared"
@@ -135,7 +134,6 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 
 	var arguments []string
 	for {
-		fmt.Println(p.current.Type)
 		if p.current.Type == Lexer.EOF {
 			return nil, errors.New("unexpected EOF in function definition")
 		} else {
@@ -157,7 +155,6 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 						break
 					}
 				} else {
-					fmt.Printf(string(p.current.Type))
 					return nil, errors.New("error while parsing arguments")
 				}
 			}
@@ -199,8 +196,35 @@ func (p *Parser) ParseIdentifier() (shared.Node, error) {
 		return VariableAssignNode{Name: ident, Value: exprNode}, nil
 	}
 	if p.current.Type == Lexer.LPAREN {
-		p.nextToken()
+		return p.ParseFunctionCall()
+
 	}
 	return VariableAccessNode{Name: ident}, nil
+}
+func (p *Parser) ParseFunctionCall() (shared.Node, error) {
+	ident := p.current.Value
+	var needArg bool = false
+	p.nextToken()
+	var args []shared.Node
+	for {
 
+		if p.current.Type == Lexer.EOF {
+			return nil, errors.New("unexpected EOF in function definition")
+		} else {
+			if !needArg && p.current.Type == Lexer.RPAREN {
+				break
+			} else {
+				value := p.expr()
+				args = append(args, value)
+				if p.current.Type == Lexer.COMMA {
+					p.nextToken()
+					needArg = true
+					continue
+				}
+			}
+
+		}
+	}
+	p.nextToken()
+	return FunctionCallNode{id: ident, Args: args}, nil
 }
