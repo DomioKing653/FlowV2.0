@@ -89,7 +89,7 @@ func (l *Lexer) NextToken() Token {
 			l.advance()
 			return l.MakeString()
 		case ',':
-			return Token{Type:COMMA,Value: ","}
+			return Token{Type: COMMA, Value: ","}
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
 		}
@@ -107,10 +107,10 @@ func (l *Lexer) MakeNumber() Token {
 	for {
 		if unicode.IsDigit(l.peek()) {
 			l.advance()
-		} else if l.peek() == '.' && hasDot == false {
+		} else if l.peek() == '.' && !hasDot {
 			hasDot = true
 			l.advance()
-		} else if l.peek() == '.' && hasDot == true {
+		} else if l.peek() == '.' && hasDot {
 			panic("can't have more than one dot in a number")
 		} else {
 			break
@@ -150,16 +150,23 @@ func (l *Lexer) MakeText() Token {
 	case "if":
 		return Token{Type: IF, Value: "if"}
 	case "while":
-		return Token{Type:WHILE,Value: "while"}
+		return Token{Type: WHILE, Value: "while"}
 	case "break":
-		return Token{Type:BREAK,Value: "break"}
+		return Token{Type: BREAK, Value: "break"}
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}
 }
 func (l *Lexer) MakeString() Token {
 	start := l.pos
-	for l.peek() != '"' {
+	for {
+		ch := l.peek()
+		if ch == 0 {
+			panic("unterminated string literal")
+		}
+		if ch == '"' {
+			break
+		}
 		l.advance()
 	}
 	text := l.input[start:l.pos]
@@ -168,9 +175,8 @@ func (l *Lexer) MakeString() Token {
 }
 
 /*
-	Main Lexer Function
+Main Lexer Function
 */
-
 func (l *Lexer) Lex() []Token {
 	var tokens []Token
 	for {

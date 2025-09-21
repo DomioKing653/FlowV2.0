@@ -119,16 +119,21 @@ func (p *Parser) ParseLoop() (shared.Node, error) {
 */
 
 func (p *Parser) ParseFunction() (shared.Node, error) {
+	// posuň na název funkce
 	p.nextToken()
 	if p.current.Type != Lexer.IDENTIFIER {
-		return nil, errors.New("expected identifier in function defiition")
+		return nil, errors.New("expected identifier in function definition")
 	}
-	var id = p.current.Value
+	id := p.current.Value
 	p.nextToken()
+
+	// očekávej "("
 	if p.current.Type != Lexer.LPAREN {
-		return nil, errors.New("expected left paren in function defiition")
+		return nil, errors.New("expected left paren in function definition")
 	}
 	p.nextToken()
+
+	// parsování argumentů
 	var arguments []string
 	for p.current.Type != Lexer.RPAREN {
 		if p.current.Type == Lexer.EOF {
@@ -136,38 +141,53 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 		}
 
 		if p.current.Type != Lexer.IDENTIFIER {
-			return nil, errors.New("expected identifier in argument list")
+			return nil, errors.New("expected identifier in argument list, got: " + p.current.Value)
 		}
 
 		arguments = append(arguments, p.current.Value)
 		p.nextToken()
 
 		if p.current.Type == Lexer.COMMA {
-			p.nextToken() // posun na další identifikátor
+			p.nextToken()
 		} else if p.current.Type != Lexer.RPAREN {
 			return nil, errors.New("expected comma or closing paren after argument")
 		}
 	}
+
 	p.nextToken()
 
-	var statments []shared.Node
 	if p.current.Type != Lexer.OpeningParen {
-		return nil, errors.New("expected openning paren")
+		return nil, errors.New("expected opening paren for function body")
 	}
 	p.nextToken()
-	for {
-		if p.current.Type == Lexer.ClosingParen {
-			break
-		} else {
-			statment, err := p.Statement()
-			shared.Check(err)
-			statments = append(statments, statment)
-		}
+
+	var statements []shared.Node
+	for p.current.Type != Lexer.ClosingParen {
 		if p.current.Type == Lexer.EOF {
-			return nil, errors.New("error while parsing function")
+			return nil, errors.New("unexpected EOF while parsing function body")
 		}
+
+		stmt, err := p.Statement()
+		shared.Check(err)
+		statements = append(statements, stmt)
 	}
 
 	p.nextToken()
-	return FunctionNode{args: arguments, statments: statments, id: id}, nil
+
+	return FunctionNode{args: arguments, statments: statements, id: id}, nil
+}
+
+func (p *Parser) ParseIdentifier() (shared.Node, error) {
+	ident := p.current.Value
+	p.nextToken()
+	if p.current.Type == Lexer.EQUALS {
+		p.nextToken()
+		exprNode := p.expr()
+		return VariableAssignNode{Name: ident, Value: exprNode}, nil
+	}
+	if p.current.Type == Lexer.LPAREN {
+		p.nextToken()
+	}
+	return VariableAccessNode{Name: ident}, nil
+
 }

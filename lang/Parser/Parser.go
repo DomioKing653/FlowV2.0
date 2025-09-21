@@ -66,17 +66,7 @@ func (p *Parser) Statement() (shared.Node, error) {
 		Identifier
 	*/
 	case Lexer.IDENTIFIER:
-		ident := current.Value
-		p.nextToken()
-		if p.current.Type == Lexer.EQUALS {
-			p.nextToken()
-			exprNode := p.expr()
-			return VariableAssignNode{Name: ident, Value: exprNode}, nil
-		}
-		if p.current.Type == Lexer.LPAREN {
-			p.nextToken()
-		}
-		return VariableAccessNode{Name: ident}, nil
+		return p.ParseIdentifier()
 	/*
 		Println
 	*/
@@ -94,9 +84,7 @@ func (p *Parser) Statement() (shared.Node, error) {
 		return p.ParseIf()
 
 	case Lexer.WHILE:
-		whilenode, err := p.ParseWhile()
-		shared.Check(err)
-		return whilenode, nil
+		return p.ParseWhile()
 	/*
 		Function
 	*/
