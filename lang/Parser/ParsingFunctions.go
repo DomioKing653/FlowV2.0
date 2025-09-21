@@ -2,6 +2,7 @@ package Parser
 
 import (
 	"errors"
+	"fmt"
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/shared"
@@ -119,6 +120,7 @@ func (p *Parser) ParseLoop() (shared.Node, error) {
 */
 
 func (p *Parser) ParseFunction() (shared.Node, error) {
+	var needArg bool = false
 	p.nextToken()
 	if p.current.Type != Lexer.IDENTIFIER {
 		return nil, errors.New("expected identifier in function definition")
@@ -133,27 +135,34 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 
 	var arguments []string
 	for {
+		fmt.Println(p.current.Type)
 		if p.current.Type == Lexer.EOF {
 			return nil, errors.New("unexpected EOF in function definition")
 		} else {
-			if p.current.Type == Lexer.RPAREN {
-				break
-			}
-			if p.current.Type != Lexer.IDENTIFIER {
-				return nil, errors.New("expected identifier in argument list, got: " + p.current.Value)
-			}
-			arguments = append(arguments, p.current.Value)
-			p.nextToken()
-
-			if p.current.Type == Lexer.COMMA {
+			if p.current.Type == Lexer.IDENTIFIER {
+				arguments = append(arguments, p.current.Value)
 				p.nextToken()
-			} else if p.current.Type != Lexer.RPAREN {
-				return nil, errors.New("expected comma or closing paren after argument")
+				if p.current.Type == Lexer.RPAREN {
+					needArg = false
+					break
+				}
+				if p.current.Type == Lexer.COMMA {
+					needArg = true
+					p.nextToken()
+					continue
+				}
+			} else {
+				if !needArg {
+					if p.current.Type == Lexer.RPAREN {
+						break
+					}
+				} else {
+					fmt.Printf(string(p.current.Type))
+					return nil, errors.New("error while parsing arguments")
+				}
 			}
 		}
-
 	}
-
 	p.nextToken()
 
 	if p.current.Type != Lexer.OpeningParen {
