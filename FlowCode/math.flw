@@ -15,3 +15,7 @@ while(i>0){
 const foo = 10.5
 const bar = 5 + foo
 println(bar)
+
+fn test (wrong,workingthin,){
+    println("test")
+}

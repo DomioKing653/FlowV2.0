@@ -6,3 +6,7 @@ type Function struct {
 	Nodes []Node
 	Args  []string
 }
+
+func InitFunctions() {
+	Functions = make(map[string]*Function)
+}

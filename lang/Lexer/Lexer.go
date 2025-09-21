@@ -89,6 +89,7 @@ func (l *Lexer) NextToken() Token {
 			l.advance()
 			return l.MakeString()
 		case ',':
+			l.advance()
 			return Token{Type: COMMA, Value: ","}
 		default:
 			panic(fmt.Sprintf("Unknow character: %q", ch))
@@ -186,5 +187,6 @@ func (l *Lexer) Lex() []Token {
 		}
 		tokens = append(tokens, tok)
 	}
+	fmt.Printf("Lexing ended")
 	return tokens
 }

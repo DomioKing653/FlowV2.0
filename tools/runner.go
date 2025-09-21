@@ -55,6 +55,7 @@ func Compile(code string, silent bool) {
 	/*
 	* Lexer
 	 */
+	fmt.Printf("Lexing")
 	lexer := Lexer.NewLexer(code)
 	var tokens = lexer.Lex()
 

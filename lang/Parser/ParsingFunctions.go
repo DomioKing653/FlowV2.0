@@ -119,7 +119,6 @@ func (p *Parser) ParseLoop() (shared.Node, error) {
 */
 
 func (p *Parser) ParseFunction() (shared.Node, error) {
-	// posuň na název funkce
 	p.nextToken()
 	if p.current.Type != Lexer.IDENTIFIER {
 		return nil, errors.New("expected identifier in function definition")
@@ -127,13 +126,11 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 	id := p.current.Value
 	p.nextToken()
 
-	// očekávej "("
 	if p.current.Type != Lexer.LPAREN {
 		return nil, errors.New("expected left paren in function definition")
 	}
 	p.nextToken()
 
-	// parsování argumentů
 	var arguments []string
 	for p.current.Type != Lexer.RPAREN {
 		if p.current.Type == Lexer.EOF {
@@ -143,7 +140,6 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 		if p.current.Type != Lexer.IDENTIFIER {
 			return nil, errors.New("expected identifier in argument list, got: " + p.current.Value)
 		}
-
 		arguments = append(arguments, p.current.Value)
 		p.nextToken()
 
@@ -176,6 +172,10 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 
 	return FunctionNode{args: arguments, statments: statements, id: id}, nil
 }
+
+/*
+Parsing id
+*/
 
 func (p *Parser) ParseIdentifier() (shared.Node, error) {
 	ident := p.current.Value
