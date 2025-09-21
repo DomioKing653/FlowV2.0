@@ -8,6 +8,8 @@ import (
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/Parser"
+	"Flow2.0/lang/env"
+	"Flow2.0/lang/shared"
 )
 
 var Console bool
@@ -31,11 +33,13 @@ func MainProgram(code string) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		if input == "run" {
+			env.Init()
+			shared.InitFunctions()
 			Compile(code, false)
 			continue
 		}
 		if input == "console" {
-			fmt.Println("Welcome to Flow console")
+			fmt.Println("Welcome to Flow console(don't forget to 'init' variables after leaving console)")
 			fmt.Print(">>>")
 			program, _ := reader.ReadString('\n')
 			Compile(program, false)
@@ -45,6 +49,10 @@ func MainProgram(code string) {
 			break
 		}
 		if input == "file" {
+		}
+		if input == "init" {
+			env.Init()
+			shared.InitFunctions()
 		} else {
 			fmt.Println("Invalid input")
 		}

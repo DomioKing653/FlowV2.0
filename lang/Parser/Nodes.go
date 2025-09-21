@@ -106,8 +106,7 @@ type ProgramNode struct {
 }
 
 func (n ProgramNode) VisitNode() (env.ValueNode, error) {
-	env.Init()
-	shared.InitFunctions()
+
 	for _, statement := range n.statements {
 		_, err := statement.VisitNode()
 		CheckRuntimeErr(err)

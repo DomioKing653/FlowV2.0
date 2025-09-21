@@ -20,4 +20,4 @@ fn test(cislo){
     println(cislo)
 }
 
-test(5,6,)
+test(5,6)
