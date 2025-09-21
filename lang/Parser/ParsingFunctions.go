@@ -132,22 +132,26 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 	p.nextToken()
 
 	var arguments []string
-	for p.current.Type != Lexer.RPAREN {
+	for {
 		if p.current.Type == Lexer.EOF {
 			return nil, errors.New("unexpected EOF in function definition")
-		}
-
-		if p.current.Type != Lexer.IDENTIFIER {
-			return nil, errors.New("expected identifier in argument list, got: " + p.current.Value)
-		}
-		arguments = append(arguments, p.current.Value)
-		p.nextToken()
-
-		if p.current.Type == Lexer.COMMA {
+		} else {
+			if p.current.Type == Lexer.RPAREN {
+				break
+			}
+			if p.current.Type != Lexer.IDENTIFIER {
+				return nil, errors.New("expected identifier in argument list, got: " + p.current.Value)
+			}
+			arguments = append(arguments, p.current.Value)
 			p.nextToken()
-		} else if p.current.Type != Lexer.RPAREN {
-			return nil, errors.New("expected comma or closing paren after argument")
+
+			if p.current.Type == Lexer.COMMA {
+				p.nextToken()
+			} else if p.current.Type != Lexer.RPAREN {
+				return nil, errors.New("expected comma or closing paren after argument")
+			}
 		}
+
 	}
 
 	p.nextToken()
