@@ -154,6 +154,8 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: WHILE, Value: "while"}
 	case "break":
 		return Token{Type: BREAK, Value: "break"}
+	case "return":
+		return Token{Type: RETURN, Value: "return"}
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}
