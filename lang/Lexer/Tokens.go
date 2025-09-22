@@ -18,8 +18,9 @@ const (
 	LOOP     TokenType = "LOOP"
 	FUNCTION TokenType = "FN"
 	IF       TokenType = "IF"
-	BREAK    TokenType ="BREAK"
-	WHILE  	 TokenType = "WHILE"
+	BREAK    TokenType = "BREAK"
+	WHILE    TokenType = "WHILE"
+	RETURN   TokenType = "RETURN"
 	/*
 		Functions
 	*/
@@ -40,7 +41,7 @@ const (
 	RPAREN       TokenType = "RPAREN"
 	OpeningParen TokenType = "OPENING_PAREN"
 	ClosingParen TokenType = "CLOSING_PAREN"
-	COMMA      	 TokenType = "COMMA"
+	COMMA        TokenType = "COMMA"
 	/*
 		Logical operators
 	*/
