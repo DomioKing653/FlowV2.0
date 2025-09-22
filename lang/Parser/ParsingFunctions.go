@@ -115,9 +115,8 @@ func (p *Parser) ParseLoop() (shared.Node, error) {
 }
 
 /*
-	Function Parsing
+Function Parsing
 */
-
 func (p *Parser) ParseFunction() (shared.Node, error) {
 	var needArg bool = false
 	p.nextToken()
@@ -186,7 +185,6 @@ func (p *Parser) ParseFunction() (shared.Node, error) {
 /*
 Parsing id
 */
-
 func (p *Parser) ParseIdentifier() (shared.Node, error) {
 	ident := p.current.Value
 	p.nextToken()
@@ -220,7 +218,6 @@ func (p *Parser) ParseFunctionCall(ident string) (shared.Node, error) {
 					continue
 				}
 			}
-
 		}
 	}
 	p.nextToken()
