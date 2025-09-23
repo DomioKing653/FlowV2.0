@@ -5,11 +5,11 @@ import (
 	"os"
 )
 
-func CheckRuntimeErr(err error){
-	if err!=nil{
-		fmt.Println("Runtime error:"+err.Error())
+func CheckRuntimeErr(err error) {
+	if err != nil {
+		fmt.Println("Runtime error:" + err.Error())
 		os.Exit(-2)
-	}else {
+	} else {
 		return
 	}
 }

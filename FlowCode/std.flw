@@ -1,0 +1,14 @@
+#calculating fibonacci
+fn fibonacci(fibMax){
+    #setup
+    let x = 0
+    let y = 1
+    let z = 0
+    while(x<fibMax){
+        println!(x)
+        z = x + y
+        x = y
+        y = z
+    }
+}
+fibonacci(150000)

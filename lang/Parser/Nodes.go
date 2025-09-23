@@ -9,6 +9,8 @@ import (
 	"Flow2.0/lang/shared"
 )
 
+var canReturn bool
+
 /*
 	Number Node
 */
@@ -400,7 +402,16 @@ type FunctionCallNode struct {
 }
 
 func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
-	fmt.Println(n.id)
+	lennght := len(n.id)
+	if n.id[lennght-1] == '!' {
+		if macro, ok := Macros[n.id]; ok {
+			macro.SetArgs(n.Args)
+			macro.Eval()
+			return env.ValueNode{}, nil
+		} else {
+			return env.ValueNode{}, errors.New("macro not found")
+		}
+	}
 	if function, ok := shared.Functions[n.id]; ok {
 		if len(n.Args) == len(function.Args) {
 			for idx := range function.Args {
@@ -408,8 +419,13 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 				CheckRuntimeErr(err)
 				env.Variables[function.Args[idx]] = &env.Variable{Value: value, Constant: false, Type: value.Type}
 			}
+			canReturn = true
 			for _, node := range function.Nodes {
-				node.VisitNode()
+				val, err := node.VisitNode()
+				CheckRuntimeErr(err)
+				if val.Return {
+					return val, nil
+				}
 			}
 		} else {
 			return env.ValueNode{}, errors.New("unexpected number of arguments")
@@ -422,4 +438,25 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 
 func (f FunctionCallNode) DisplayNode() {
 	fmt.Printf("idk")
+}
+
+type ReturnNode struct {
+	value shared.Node
+}
+
+func (n ReturnNode) VisitNode() (env.ValueNode, error) {
+	val, err := n.value.VisitNode()
+	CheckRuntimeErr(err)
+
+	if val.Type == Lexer.NilVariable {
+		return env.ValueNode{}, errors.New("cannot return nil")
+	} else {
+		if canReturn {
+			val.Return = true
+			return val, nil
+		} else {
+			return env.ValueNode{}, errors.New("cannot return")
+		}
+	}
+
 }

@@ -7,4 +7,5 @@ type ValueNode struct {
 	NumberValue float64
 	ValueStr    string
 	ValueBool   bool
+	Return      bool
 }

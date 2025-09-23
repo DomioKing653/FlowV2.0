@@ -129,7 +129,7 @@ func (l *Lexer) MakeNumber() Token {
 
 func (l *Lexer) MakeText() Token {
 	start := l.pos
-	for unicode.IsLetter(l.peek()) {
+	for unicode.IsLetter(l.peek()) || l.peek() == '!' {
 		l.advance()
 	}
 	text := l.input[start:l.pos]
