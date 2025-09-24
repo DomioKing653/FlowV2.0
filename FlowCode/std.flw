@@ -13,5 +13,5 @@ fn fibonacci(fibMax){
 }
 
 fibonacci(5000)
-let idkLol = readFloat!()
+let idkLol = readloat!()
 println!(idkLol)

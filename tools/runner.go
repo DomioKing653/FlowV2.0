@@ -14,6 +14,7 @@ import (
 
 var Console bool
 var PublicCode string
+var PublicPath string
 
 func Run(code string, silent bool) {
 	code = strings.TrimSpace(code)

@@ -11,6 +11,7 @@ func checkErr(err error) {
 }
 
 func ReadFile(filename string) string {
+	PublicPath = filename
 	code, err := os.ReadFile(filename)
 	checkErr(err)
 	return string(code)
