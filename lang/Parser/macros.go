@@ -1,7 +1,10 @@
 package Parser
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/env"
@@ -32,5 +35,26 @@ func (f *PrintlnMacro) Eval() (env.ValueNode, error) {
 }
 
 func (f *PrintlnMacro) SetArgs(args []shared.Node) {
+	f.args = args
+}
+
+/*
+ReadFloat Macro
+*/
+
+type ReadFloatMacro struct {
+	args []shared.Node
+}
+
+func (f *ReadFloatMacro) Eval() (env.ValueNode, error) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter float:")
+	line, err := reader.ReadString('\n')
+	CheckRuntimeErr(err)
+	value, err := strconv.ParseFloat(line, 64)
+	return env.ValueNode{Type: Lexer.FloatVariable, NumberValue: value}, nil
+}
+
+func (f *ReadFloatMacro) SetArgs(args []shared.Node) {
 	f.args = args
 }

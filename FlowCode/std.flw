@@ -11,4 +11,3 @@ fn fibonacci(fibMax){
         y = z
     }
 }
-fibonacci(150000)

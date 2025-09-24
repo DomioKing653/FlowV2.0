@@ -70,8 +70,8 @@ func (p *Parser) Statement() (shared.Node, error) {
 	/*
 		Println
 	*/
-	case Lexer.PRINTLN:
-		return p.ParsePrintLn()
+	/*case Lexer.PRINTLN:
+	return p.ParsePrintLn()*/
 	/*
 		Loop
 	*/

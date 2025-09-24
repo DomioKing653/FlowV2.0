@@ -10,7 +10,7 @@ import (
 /*
 Println parsing function
 */
-func (p *Parser) ParsePrintLn() (shared.Node, error) {
+/*func (p *Parser) ParsePrintLn() (shared.Node, error) {
 	p.nextToken()
 	if p.current.Type != Lexer.LPAREN {
 		return nil, errors.New("Expected LPAREN but found:" + p.current.Value)
@@ -23,7 +23,7 @@ func (p *Parser) ParsePrintLn() (shared.Node, error) {
 	p.nextToken()
 	return PrintLnNode{exprNode}, nil
 }
-
+*/
 /*
 If parsing function
 */

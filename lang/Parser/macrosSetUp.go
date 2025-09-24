@@ -6,7 +6,8 @@ import (
 )
 
 var Macros = map[string]Macro{
-	"println!": &PrintlnMacro{},
+	"println!":   &PrintlnMacro{},
+	"readFloat!": &ReadFloatMacro{},
 }
 
 type Macro interface {

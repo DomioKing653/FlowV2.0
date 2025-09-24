@@ -218,7 +218,7 @@ func (n VariableAssignNode) DisplayNode() {
 	Println node
 */
 
-type PrintLnNode struct {
+/*type PrintLnNode struct {
 	Value shared.Node
 }
 
@@ -240,6 +240,7 @@ func (n PrintLnNode) VisitNode() (env.ValueNode, error) {
 func (n PrintLnNode) DisplayNode() {
 	fmt.Printf("prinln()\n")
 }
+*/
 
 /*
 	Loop Node
@@ -438,25 +439,4 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 
 func (f FunctionCallNode) DisplayNode() {
 	fmt.Printf("idk")
-}
-
-type ReturnNode struct {
-	value shared.Node
-}
-
-func (n ReturnNode) VisitNode() (env.ValueNode, error) {
-	val, err := n.value.VisitNode()
-	CheckRuntimeErr(err)
-
-	if val.Type == Lexer.NilVariable {
-		return env.ValueNode{}, errors.New("cannot return nil")
-	} else {
-		if canReturn {
-			val.Return = true
-			return val, nil
-		} else {
-			return env.ValueNode{}, errors.New("cannot return")
-		}
-	}
-
 }

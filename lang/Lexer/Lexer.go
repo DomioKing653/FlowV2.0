@@ -130,14 +130,16 @@ func (l *Lexer) MakeNumber() Token {
 func (l *Lexer) MakeText() Token {
 	start := l.pos
 	for unicode.IsLetter(l.peek()) || l.peek() == '!' {
+		if l.peek() == '!' {
+			l.advance()
+			break
+		}
 		l.advance()
 	}
 	text := l.input[start:l.pos]
 	switch text {
 	case "let":
 		return Token{Type: LET, Value: "let"}
-	case "println":
-		return Token{Type: PRINTLN, Value: "println"}
 	case "const":
 		return Token{Type: CONST, Value: "const"}
 	case "loop":
@@ -154,8 +156,6 @@ func (l *Lexer) MakeText() Token {
 		return Token{Type: WHILE, Value: "while"}
 	case "break":
 		return Token{Type: BREAK, Value: "break"}
-	case "return":
-		return Token{Type: RETURN, Value: "return"}
 	default:
 		return Token{Type: IDENTIFIER, Value: text}
 	}
