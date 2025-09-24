@@ -115,6 +115,9 @@ func (p *Parser) factor() (shared.Node, error) {
 	if tok.Type == Lexer.IDENTIFIER {
 		ident := tok.Value
 		p.nextToken()
+		if p.current.Type == Lexer.LPAREN {
+			return p.ParseFunctionCall(ident)
+		}
 		return VariableAccessNode{Name: ident}, nil
 	}
 	if tok.Type == Lexer.LPAREN {
@@ -139,7 +142,7 @@ func (p *Parser) factor() (shared.Node, error) {
 		p.nextToken()
 		return StringNode{Value: tok.Value}, nil
 	} else {
-		return nil, errors.New("Syntax Error: Expected VALUE but found " + tok.Value)
+		return nil, errors.New(" Expected VALUE but found " + tok.Value)
 	}
 }
 

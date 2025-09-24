@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/env"
@@ -51,7 +52,8 @@ func (f *ReadFloatMacro) Eval() (env.ValueNode, error) {
 	fmt.Print("Enter float:")
 	line, err := reader.ReadString('\n')
 	CheckRuntimeErr(err)
-	value, err := strconv.ParseFloat(line, 64)
+	value, err := strconv.ParseFloat(strings.TrimSpace(line), 64)
+	CheckRuntimeErr(err)
 	return env.ValueNode{Type: Lexer.FloatVariable, NumberValue: value}, nil
 }
 

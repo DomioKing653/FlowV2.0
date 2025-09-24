@@ -204,7 +204,7 @@ func (p *Parser) ParseFunctionCall(ident string) (shared.Node, error) {
 	var args []shared.Node
 	for {
 		if p.current.Type == Lexer.EOF {
-			return nil, errors.New("unexpected EOF in function definition")
+			return nil, errors.New("unexpected EOF in function call")
 		} else {
 			if !needArg && p.current.Type == Lexer.RPAREN {
 				break

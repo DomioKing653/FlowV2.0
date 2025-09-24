@@ -139,7 +139,6 @@ func (n VariableNode) VisitNode() (env.ValueNode, error) {
 	if _, ok := env.Variables[n.Name]; ok {
 		return env.ValueNode{}, errors.New("variable alredy exists")
 	}
-
 	value, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 
@@ -148,9 +147,8 @@ func (n VariableNode) VisitNode() (env.ValueNode, error) {
 		Type:     value.Type,
 		Constant: n.Constant,
 	}
-	val, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
-	return val, nil
+	return value, nil
 }
 
 func (n VariableNode) DisplayNode() {
@@ -407,8 +405,7 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 	if n.id[lennght-1] == '!' {
 		if macro, ok := Macros[n.id]; ok {
 			macro.SetArgs(n.Args)
-			macro.Eval()
-			return env.ValueNode{}, nil
+			return macro.Eval()
 		} else {
 			return env.ValueNode{}, errors.New("macro not found")
 		}
@@ -422,11 +419,8 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 			}
 			canReturn = true
 			for _, node := range function.Nodes {
-				val, err := node.VisitNode()
+				_, err := node.VisitNode()
 				CheckRuntimeErr(err)
-				if val.Return {
-					return val, nil
-				}
 			}
 		} else {
 			return env.ValueNode{}, errors.New("unexpected number of arguments")

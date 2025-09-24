@@ -11,3 +11,7 @@ fn fibonacci(fibMax){
         y = z
     }
 }
+
+fibonacci(5000)
+let idkLol = readFloat!()
+println!(idkLol)
