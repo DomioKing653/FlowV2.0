@@ -12,6 +12,5 @@ fn fibonacci(fibMax){
     }
 }
 
-fibonacci(5000)
-let idkLol = readloat!()
-println!(idkLol)
+const maxValue = readFloat!()
+fibonacci(maxValue) 
