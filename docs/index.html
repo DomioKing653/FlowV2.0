@@ -1,25 +1,65 @@
 <!DOCTYPE html>
+
 <head>
     <title>
         Flow language
     </title>
     <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
-    <html>
-        <div id="top-div">
-            <h1 id="main-header">Flow</h1>
+    <div id="top-div">
+        <h1 id="main-header">Flow</h1>
+    </div>
+    <div id="option-div">
+        <a href="download.html" class="option-button">
+            Download
+        </a>
+        <a href="docs.html" class="option-button">
+            Docs
+        </a>
+        <a href="development.html" class="option-button">
+            Development
+        </a>
+    </div>
+    <div id="slogan-div">
+        <p id="slogan-text">
+            Flow is general purpose interpretet programing language made for easy to maintain code
+        </p>
+    </div>
+    <div id="main-text">
+        <div id="pros-cons">
+            <h1 class="advantiges-head">
+                <strong>
+                    👀 Easy to read
+                </strong>
+                <ul>
+                    <li>
+                        Simple keywords
+                    </li>
+                </ul>
+            </h1>
         </div>
-        <div id="option-div">
-            <a href="download.html" class="option-button">
-                Download
-            </a>
-            <a href="docs.html" class="option-button" >
-                Docs
-            </a>
-            <a href="development.html" class="option-button" >
-                Development
-            </a>
+        <div id="code">
+            <pre>
+                    <code>
+                        #calculating fibonacci
+                        fn fibonacci(fibMax){
+                            #setup
+                            let x = 0
+                            let y = 1
+                            let z = 0
+                            while(x< fibMax){
+                                println!(x)
+                                z = x + y
+                                x = y
+                                y = z
+                            }
+                        }
+                        const maxValue = readFloat!()
+                        fibonacci(maxValue)
+                    </code>
+                </pre>
         </div>
-    </html>
+    </div>
 </body>
