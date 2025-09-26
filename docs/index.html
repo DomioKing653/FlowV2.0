@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
     <title>
-        Flow language
+        Home ✨ Flow language
     </title>
     <link rel="stylesheet" href="index.css">
 </head>
@@ -31,35 +32,66 @@
         <div id="pros-cons">
             <h1 class="advantiges-head">
                 <strong>
-                    👀 Easy to read
+                    ✨Simple language
                 </strong>
+                <p>
+                    Focus on writing the actual code and not boilerplate
+                </p>
                 <ul>
                     <li>
                         Simple keywords
+                    </li>
+                    <li>
+                        Zero configuration needed
+                    </li>
+                    <li>
+                        Built-in macros
+                    </li>
+                </ul>
+            </h1>
+            <h1 class="advantiges-head">
+                <strong>
+                    💯 Code it with Flow
+                </strong>
+                <ul>
+                    <li>
+                        Built-in macros
+                    </li>
+                    <li>
+                        Easy to maintain
+                    </li>
+                    <li>
+                        Fast startup
                     </li>
                 </ul>
             </h1>
         </div>
         <div id="code">
+            <div id="code-header">
+                Fibonacci.flw
+            </div>
             <pre>
-                    <code>
-                        #calculating fibonacci
-                        fn fibonacci(fibMax){
-                            #setup
-                            let x = 0
-                            let y = 1
-                            let z = 0
-                            while(x< fibMax){
-                                println!(x)
-                                z = x + y
-                                x = y
-                                y = z
-                            }
-                        }
-                        const maxValue = readFloat!()
-                        fibonacci(maxValue)
-                    </code>
-                </pre>
+<code>
+<span class="comment">#calculating fibonacci</span>
+<span class="keyword">fn</span> fibonacci(<span class="variable">fibMax</span>){
+    <span class="comment">#setup</span>
+    <span class="keyword">let</span> <span class="variable">x</span> = 0
+    <span class="keyword">let</span> <span class="variable">y</span> = 1
+    <span class="keyword">let</span> <span class="variable">z</span> = 0
+    <span class="keyword">while</span>(<span class="variable">x</span> < <span class="variable">fibMax</span>){
+        <span class="macro">println!</span>(<span class="variable">x</span>)
+        <span class="variable">z</span> = <span class="variable">x</span> + <span class="variable">y</span>
+        <span class="variable">x</span> = <span class="variable">y</span>
+        <span class="variable">y</span> = <span class="variable">z</span>
+    }
+}
+<span class="keyword">const</span> <span class="variable">maxValue</span> = <span class="macro">readFloat!</span>()
+fibonacci(<span class="variable">maxValue</span>)
+</code>
+            </pre>
         </div>
     </div>
+
 </body>
+
+</html>
