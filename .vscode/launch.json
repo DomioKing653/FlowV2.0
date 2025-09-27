@@ -2,12 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Go App",
+            "name": "Run Go App with Args",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}",
-            "preLaunchTask": "build-go"
+            "args": [
+                "C:\\Users\\simon\\AAAProjects\\FlowV2.0\\FlowCode\\std.flw"
+            ],
+            "console": "integratedTerminal",
         }
     ]
 }

@@ -8,7 +8,6 @@ import (
 
 	"Flow2.0/lang/Lexer"
 	"Flow2.0/lang/Parser"
-	"Flow2.0/lang/env"
 	"Flow2.0/lang/shared"
 )
 
@@ -34,7 +33,6 @@ func MainProgram(code string) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		if input == "run" {
-			env.Init()
 			shared.InitFunctions()
 			Compile(code, false)
 			continue
@@ -52,7 +50,6 @@ func MainProgram(code string) {
 		if input == "file" {
 		}
 		if input == "init" {
-			env.Init()
 			shared.InitFunctions()
 		} else {
 			fmt.Println("Invalid input")

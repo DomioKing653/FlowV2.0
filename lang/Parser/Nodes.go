@@ -10,6 +10,8 @@ import (
 )
 
 var canReturn bool
+var currentScope env.Scope
+var scopeIdx int
 
 /*
 	Number Node
@@ -108,7 +110,9 @@ type ProgramNode struct {
 }
 
 func (n ProgramNode) VisitNode() (env.ValueNode, error) {
-
+	env.Scopes = append(env.Scopes, env.Scope{Variables: make(map[string]*env.Variable)})
+	currentScope = env.Scopes[len(env.Scopes)-1]
+	scopeIdx = 0
 	for _, statement := range n.statements {
 		_, err := statement.VisitNode()
 		CheckRuntimeErr(err)
@@ -136,13 +140,13 @@ type VariableNode struct {
 }
 
 func (n VariableNode) VisitNode() (env.ValueNode, error) {
-	if _, ok := env.Variables[n.Name]; ok {
+	if _, ok := currentScope.Variables[n.Name]; ok {
 		return env.ValueNode{}, errors.New("variable alredy exists")
 	}
 	value, err := n.Value.VisitNode()
 	CheckRuntimeErr(err)
 
-	env.Variables[n.Name] = &env.Variable{
+	currentScope.Variables[n.Name] = &env.Variable{
 		Value:    value,
 		Type:     value.Type,
 		Constant: n.Constant,
@@ -174,7 +178,7 @@ type VariableAccessNode struct {
 }
 
 func (n VariableAccessNode) VisitNode() (env.ValueNode, error) {
-	variable, ok := env.Variables[n.Name]
+	variable, ok := currentScope.Variables[n.Name]
 	if ok {
 		return variable.Value, nil
 	} else {
@@ -195,7 +199,7 @@ type VariableAssignNode struct {
 }
 
 func (n VariableAssignNode) VisitNode() (env.ValueNode, error) {
-	variable, ok := env.Variables[n.Name]
+	variable, ok := currentScope.Variables[n.Name]
 	if !ok {
 		return env.ValueNode{}, errors.New("variable not found")
 
@@ -415,7 +419,7 @@ func (n FunctionCallNode) VisitNode() (env.ValueNode, error) {
 			for idx := range function.Args {
 				value, err := n.Args[idx].VisitNode()
 				CheckRuntimeErr(err)
-				env.Variables[function.Args[idx]] = &env.Variable{Value: value, Constant: false, Type: value.Type}
+				currentScope.Variables[function.Args[idx]] = &env.Variable{Value: value, Constant: false, Type: value.Type}
 			}
 			canReturn = true
 			for _, node := range function.Nodes {
